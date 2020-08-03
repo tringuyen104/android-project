@@ -6,6 +6,7 @@ import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.zotee.Controller.NoteController;
 import com.example.zotee.Model.Note;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView textView;
     NoteController _noteController;
 
     @Override
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        textView = findViewById(R.id.txtView);
         _noteController = new NoteController(getApplicationContext());
         //AppDatabase _noteController  = AppDatabase.getInstance(getApplicationContext());
         Note noteInfo = new Note();
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         _noteController.Patch(note);
 
         List<Note> lstInfo = _noteController.Get();
+
+        textView.setText(lstInfo.get(0).getAddress());
         Log.i(this.toString(), "getInfo " + lstInfo.get(0).getAddress());
     }
 }
