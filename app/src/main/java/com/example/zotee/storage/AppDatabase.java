@@ -7,11 +7,12 @@ import androidx.room.TypeConverters;
 import com.example.zotee.storage.converter.DateConverter;
 import com.example.zotee.storage.dao.NoteDao;
 import com.example.zotee.storage.entity.NoteEntity;
+import com.example.zotee.storage.entity.NoteFtsEntity;
 
 /**
  * @author thinh.nguyen
  */
-@Database(entities = {NoteEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {NoteEntity.class, NoteFtsEntity.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

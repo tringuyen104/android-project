@@ -1,6 +1,7 @@
 package com.example.zotee.activity.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,11 @@ public class ItemListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final NoteListViewModel viewModel =
                 new ViewModelProvider(requireActivity()).get(NoteListViewModel.class);
+
+        binding.searchBtn.setOnClickListener(v -> {
+            Editable query = binding.searchBox.getText();
+            viewModel.setQuery(query);
+        });
 
         viewModel.getData().observe(getViewLifecycleOwner(), noteEntities -> {
             if (noteEntities != null) {

@@ -1,13 +1,10 @@
 package com.example.zotee.activity.fragment.model;
 
-import android.app.Application;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.hilt.Assisted;
 import androidx.hilt.lifecycle.ViewModelInject;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
@@ -41,6 +38,10 @@ public class NoteListViewModel extends ViewModel {
                     }
                     return dataRepository.search("*" + query + "*");
                 });
+    }
+
+    public void setQuery(CharSequence query) {
+        savedStateHandle.set("QUERY", query);
     }
 
     public LiveData<List<NoteEntity>> getData() {
