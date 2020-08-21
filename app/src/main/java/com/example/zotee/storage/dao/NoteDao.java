@@ -33,7 +33,8 @@ public interface NoteDao {
     @Query("select * from notes where id = :noteId")
     NoteEntity loadNoteSync(int noteId);
 
-    @Query("SELECT * FROM notes WHERE notes.title MATCH :query OR notes.content MATCH :query OR notes.locationName MATCH :query")
+    @Query("SELECT notes.* FROM notes JOIN notesFts ON (notes.id = notesFts.rowid) "
+            + "WHERE notesFts MATCH :query")
     LiveData<List<NoteEntity>> searchAllNotes(String query);
 
     @Delete

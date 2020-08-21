@@ -12,9 +12,6 @@ import com.example.zotee.storage.AppDatabase;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.DataSource;
 import com.example.zotee.storage.dao.NoteDao;
-import com.example.zotee.storage.entity.NoteEntity;
-
-import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -38,8 +35,10 @@ public class StorageModule {
                 .addMigrations(new Migration(1, 2) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase database) {
-                        database.execSQL("INSERT INTO notes (`title`, `content`, `locationName`) "
-                                + "VALUES ('Hello', 'This is a demo note', 'SaiGon')");
+                        database.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS `notesFts` USING FTS4("
+                                + "`title` TEXT, `content` TEXT, content=`notes`)");
+                        database.execSQL("INSERT INTO notesFts (`rowid`, `title`, `content`) "
+                                + "SELECT `id`, `title`, `content` FROM notes");
                     }
                 })
                 .fallbackToDestructiveMigration()

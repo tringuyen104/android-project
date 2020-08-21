@@ -43,8 +43,7 @@ public class DataSource implements DataRepository {
 
     @Override
     public LiveData<List<NoteEntity>> search(String query) {
-//        return noteDao.searchAllNotes(query);
-        return null;
+        return noteDao.searchAllNotes(query);
     }
 
 }
