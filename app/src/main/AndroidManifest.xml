@@ -13,6 +13,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDE-HPuI0NspB8Mrh9yDYdFcshXU4o6u0s" />
+        <activity android:name=".MapFragmentActivity"></activity>
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
@@ -23,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>
