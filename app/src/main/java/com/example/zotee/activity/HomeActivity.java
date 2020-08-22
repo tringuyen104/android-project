@@ -1,18 +1,20 @@
 package com.example.zotee.activity;
 
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.zotee.MapFragmentActivity;
 import com.example.zotee.activity.fragment.ItemListFragment;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
 
 import com.example.zotee.R;
 
@@ -51,15 +53,20 @@ public class HomeActivity extends AppCompatActivity {
                         entity.setLng("17");
                         dataRepository.insert(entity);
                     });
+
                 });
 
 
         // Add product list note if this is first creation
         if (savedInstanceState == null) {
-            ItemListFragment fragment = new ItemListFragment();
+//            ItemListFragment fragment = new ItemListFragment();
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
+            Intent intent = new Intent(this, MapFragmentActivity.class);
+            startActivity(intent);
+
         }
     }
 }
