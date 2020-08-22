@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
 
-            Intent intent = new Intent(this, MapFragmentActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MapFragmentActivity.class);
             startActivity(intent);
 
         }
