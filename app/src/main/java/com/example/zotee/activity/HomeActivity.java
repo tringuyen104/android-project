@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.zotee.R;
 
@@ -53,19 +54,17 @@ public class HomeActivity extends AppCompatActivity {
                         entity.setLng("17");
                         dataRepository.insert(entity);
                     });
-
+                    Intent intent = new Intent(HomeActivity.this, MapFragmentActivity.class);
+                    startActivity(intent);
                 });
 
 
         // Add product list note if this is first creation
         if (savedInstanceState == null) {
-//            ItemListFragment fragment = new ItemListFragment();
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
+            ItemListFragment fragment = new ItemListFragment();
 
-            Intent intent = new Intent(getApplicationContext(), MapFragmentActivity.class);
-            startActivity(intent);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
 
         }
     }
