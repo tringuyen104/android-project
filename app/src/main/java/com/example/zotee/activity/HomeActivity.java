@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.MapFragmentActivity;
 import com.example.zotee.activity.fragment.ItemListFragment;
 import com.example.zotee.storage.DataRepository;
@@ -54,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
                         entity.setLng("17");
                         dataRepository.insert(entity);
                     });
-                    Intent intent = new Intent(HomeActivity.this, MapFragmentActivity.class);
+                    Intent intent = new Intent(HomeActivity.this, EventDetailsActivity.class);
                     startActivity(intent);
                 });
 

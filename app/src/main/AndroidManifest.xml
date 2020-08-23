@@ -10,10 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDE-HPuI0NspB8Mrh9yDYdFcshXU4o6u0s" />
+        <activity android:name=".EventDetailsActivity"></activity>
 
         <activity
             android:name=".activity.HomeActivity"
@@ -23,13 +20,20 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>>
+            </intent-filter>
+            >
         </activity>
-        <activity android:name=".MapFragmentActivity"
-            android:label="@string/title_activity_home"></activity>
+
+        <activity
+            android:name=".MapFragmentActivity"
+            android:label="@string/title_activity_home" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDE-HPuI0NspB8Mrh9yDYdFcshXU4o6u0s" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
