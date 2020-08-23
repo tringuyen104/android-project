@@ -22,42 +22,53 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.zotee.R;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityMap extends FragmentActivity {
 
     private GoogleMap mMap;
-    private EditText txtAddress;
-    private ImageButton btnSearch;
-    private TextView lblLat;
-    private TextView lblLongit;
-    private double lat;
-    private double longit;
+    private EditText txtEventName;
+    private EditText txtTime;
+    private EditText txtFrom;
+    private EditText txtTo;
+    private Button btnSave;
+    private String EventName;
+    private Date Time;
+    private double latFrom;
+    private double longitFrom;
+    private double latTo;
+    private double longitTo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         Geocoder coder = new Geocoder(this);
-        txtAddress = (EditText)findViewById(R.id.search_box);
-        btnSearch = (ImageButton)findViewById(R.id.search_btn);
-        lblLat = (TextView)findViewById(R.id.lbllat);
-        lblLongit = (TextView)findViewById(R.id.lbllongit);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        txtEventName = (EditText)findViewById(R.id.event_name);
+        txtTime = (EditText)findViewById(R.id.txtTime);
+        txtFrom = (EditText)findViewById(R.id.from);
+        txtTo = (EditText)findViewById(R.id.to);
+        btnSave = (Button)findViewById(R.id.save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Address> address;
+                List<Address> From;
+                List<Address> To;
                 try {
-                    address = coder.getFromLocationName(txtAddress.getText().toString(),255);
-                    Address location=address.get(0);
-                    lat = location.getLatitude();
-                    longit = location.getLongitude();
-                    String Lat = new Double(lat).toString();
-                    String Longit = new Double(longit).toString();
-                    lblLat.setText("Latitude: " + Lat);
-                    lblLongit.setText("Longitude: " + Longit);
-                    Log.d("TAG", "onCreate: "+ lat+ " - " + longit);
+                    From = coder.getFromLocationName(txtFrom.getText().toString(),255);
+                    To = coder.getFromLocationName(txtTo.getText().toString(), 255);
+                    Address locationFrom = From.get(0);
+                    Address locationTo = To.get(0);
+                    latFrom = locationFrom.getLatitude();
+                    longitFrom = locationFrom.getLongitude();
+                    String LatFrom = new Double(latFrom).toString();
+                    String LongitFrom = new Double(longitFrom).toString();
+                    latTo = locationTo.getLatitude();
+                    longitTo = locationTo.getLongitude();
+                    String LatTo = new Double(latTo).toString();
+                    String LongitTo = new Double(longitTo).toString();
+                    Log.d("TAG", "onCreate: "+ latFrom+ " - " + longitFrom);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

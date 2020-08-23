@@ -14,4 +14,78 @@
         android:name="com.google.android.gms.maps.SupportMapFragment">
     </fragment>
 
+    <LinearLayout
+        android:id="@+id/linearLayoutEventName"
+        android:layout_width="349dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Event's name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/txtDate"
+            android:layout_width="146dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:calendarViewShown="false"
+            android:hint="DateTime"
+            android:inputType="datetime"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlace"
+        android:layout_width="348dp"
+        android:layout_height="136dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.135">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/from"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="From"
+            android:inputType="text"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/to"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="To"
+            android:inputType="text"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="161dp"
+        android:layout_height="56dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.876"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPlace"
+        app:layout_constraintVertical_bias="0.056" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
