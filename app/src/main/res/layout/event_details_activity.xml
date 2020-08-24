@@ -31,18 +31,38 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/etSource"
+        android:hint="Enter source location"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/editbox_background">
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etDestination"
+        android:hint="Enter destination location"
+        android:padding="12dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:drawable/editbox_background">
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/content"
         android:hint="Content"
         android:padding="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:background="@android:drawable/editbox_background">
     </EditText>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bt_set_path"
-        android:text="Set Path"
-        android:layout_marginTop="24dp">
+        android:id="@+id/bt_track_path"
+        android:text="Track Path"
+        android:layout_marginTop="40dp">
     </Button>
 </LinearLayout>
