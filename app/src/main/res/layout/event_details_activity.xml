@@ -28,15 +28,15 @@
         android:background="@android:drawable/editbox_background">
     </EditText>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etSource"
-        android:hint="Enter source location"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:drawable/editbox_background">
-    </EditText>
+<!--    <EditText-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/etSource"-->
+<!--        android:hint="Enter source location"-->
+<!--        android:padding="12dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="@android:drawable/editbox_background">-->
+<!--    </EditText>-->
 
     <EditText
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
         android:id="@+id/etDestination"
         android:hint="Enter destination location"
         android:padding="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@android:drawable/editbox_background">
     </EditText>
 
@@ -54,7 +54,7 @@
         android:id="@+id/content"
         android:hint="Content"
         android:padding="12dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:background="@android:drawable/editbox_background">
     </EditText>
 
@@ -63,6 +63,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/bt_track_path"
         android:text="Track Path"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="32dp">
     </Button>
 </LinearLayout>
