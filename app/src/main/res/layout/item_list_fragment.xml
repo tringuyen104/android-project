@@ -8,27 +8,6 @@
         android:background="@color/cardview_light_background"
         android:orientation="vertical"
         >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/search_box"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:id="@+id/search_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="Search"
-                app:srcCompat="@drawable/ic_search_black_24dp"/>
-        </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_list"
             android:layout_width="match_parent"

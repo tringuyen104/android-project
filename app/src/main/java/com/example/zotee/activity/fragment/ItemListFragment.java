@@ -1,10 +1,13 @@
 package com.example.zotee.activity.fragment;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -22,11 +25,13 @@ public class ItemListFragment extends Fragment {
 
     private ItemListFragmentBinding binding;
     private NoteAdapter noteAdapter;
-
+    private NoteListViewModel viewModel;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
         noteAdapter = new NoteAdapter((note) -> {
@@ -40,13 +45,7 @@ public class ItemListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final NoteListViewModel viewModel =
-                new ViewModelProvider(requireActivity()).get(NoteListViewModel.class);
-
-        binding.searchBtn.setOnClickListener(v -> {
-            Editable query = binding.searchBox.getText();
-            viewModel.setQuery(query);
-        });
+        viewModel = new ViewModelProvider(requireActivity()).get(NoteListViewModel.class);
 
         viewModel.getData().observe(getViewLifecycleOwner(), noteEntities -> {
             if (noteEntities != null) {
@@ -54,6 +53,25 @@ public class ItemListFragment extends Fragment {
             }
             binding.executePendingBindings();
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        MenuItem item = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                viewModel.setQuery(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
