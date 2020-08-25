@@ -25,12 +25,14 @@ import android.widget.Toast;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import com.example.zotee.activity.HomeActivity;
-import com.example.zotee.MapFragmentActivity;
+import java.util.Date;
+import java.util.logging.SimpleFormatter;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
@@ -56,7 +58,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     private FusedLocationProviderClient client;
     private Location currentLocation;
     private static final int REQUEST_CODE = 101;
-    private String sSource = "";
+    private String sSource = "", date = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
         btnSetPath = (Button) findViewById(R.id.bt_track_path);
         eventName = (EditText) findViewById(R.id.event_name);
         txtTime = (EditText) findViewById(R.id.time);
-        source = (EditText) findViewById(R.id.etSource);
+//        source = (EditText) findViewById(R.id.etSource);
         des = (EditText) findViewById(R.id.etDestination);
         Content = (EditText) findViewById(R.id.content);
 
@@ -81,26 +83,37 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                 datePickerDialog.show();
             }
         });
-        btnSetPath = findViewById(R.id.bt_track_path);
-      //  source = findViewById(R.id.etSource);
-        des = findViewById(R.id.etDestination);
 
         //initialize fuse location
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
 
-
         btnSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //get value from edit text
-               // sSource = source.getText().toString().trim();
+                // sSource = source.getText().toString().trim();
                 String sDes = des.getText().toString().trim();
 
                 //check condition
-                if(sDes.isEmpty()) {
+                if (sDes.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter both location!", Toast.LENGTH_SHORT).show();
                 } else {
+                    AsyncTask.execute(() -> {
+                        NoteEntity entity = new NoteEntity();
+                        entity.setTitle(eventName.getText().toString());
+                        date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy/ HH:mm");
+                        try {
+                            entity.setDate(simpleDateFormat.parse(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        entity.setLocationName(sDes);
+                        entity.setContent(Content.getText().toString());
+                        dataRepository.insert(entity);
+                        Log.d("TAG", "onCreate: " + entity.getTitle());
+                    });
                     getCurrentLocation();
                     DisplayTrack(sSource, sDes);
                 }
