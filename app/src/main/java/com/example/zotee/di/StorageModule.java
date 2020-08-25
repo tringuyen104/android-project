@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
@@ -32,13 +31,14 @@ public class StorageModule {
     @Provides
     AppDatabase providesDatabase(Application application) {
         return Room.databaseBuilder(application, AppDatabase.class, "notes-db")
-                .addMigrations(new Migration(1, 2) {
+                .addMigrations(
+                        new Migration(1, 2) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase database) {
                         database.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS `notesFts` USING FTS4("
-                                + "`title` TEXT, `content` TEXT, content=`notes`)");
-                        database.execSQL("INSERT INTO notesFts (`rowid`, `title`, `content`) "
-                                + "SELECT `id`, `title`, `content` FROM notes");
+                                + "`title` TEXT, `content` TEXT, `locationName` TEXT,content=`notes`)");
+                        database.execSQL("INSERT INTO notesFts (`rowid`, `title`, `content`, `locationName`) "
+                                + "SELECT `id`, `title`, `content`, `locationName` FROM notes");
                     }
                 })
                 .fallbackToDestructiveMigration()
