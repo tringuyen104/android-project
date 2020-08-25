@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.style.BulletSpan;
 import android.util.Log;
 
+import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.MapFragmentActivity;
 import com.example.zotee.activity.callback.ItemClickCallback;
 import com.example.zotee.activity.fragment.ItemListFragment;
@@ -31,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class HomeActivity extends AppCompatActivity implements ItemClickCallback {
+public class HomeActivity extends AppCompatActivity {
 
     @Inject
     DataRepository dataRepository;
@@ -47,18 +48,7 @@ public class HomeActivity extends AppCompatActivity implements ItemClickCallback
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-//
-//                    AsyncTask.execute(() -> {
-//                        NoteEntity entity = new NoteEntity();
-//                        entity.setLocationName("SaiGon");
-//                        entity.setTitle("Test");
-//                        entity.setContent("Content");
-//                        entity.setDate(new Date());
-//                        entity.setLat("North");
-//                        entity.setLng("17");
-//                        dataRepository.insert(entity);
-//                    });
-                    Intent intent = new Intent(HomeActivity.this, MapFragmentActivity.class);
+                    Intent intent = new Intent(HomeActivity.this, EventDetailsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("Key_1", "fab");
                     intent.putExtras(bundle);
@@ -75,8 +65,4 @@ public class HomeActivity extends AppCompatActivity implements ItemClickCallback
         }
     }
 
-    @Override
-    public void onClick(Item item) {
-        Log.d("TAG", "onClick: " +item.toString());
-    }
 }
