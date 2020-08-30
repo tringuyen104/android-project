@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
                         entity.setDate(new Date());
                         entity.setLat("North");
                         entity.setLng("17");
-                        dataRepository.insert(entity);
+                        dataRepository.insert(entity, true);
                     });
                 });
 

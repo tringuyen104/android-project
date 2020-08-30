@@ -3,6 +3,7 @@ package com.example.zotee.storage;
 import androidx.lifecycle.LiveData;
 
 import com.example.zotee.storage.entity.NoteEntity;
+import com.google.firebase.database.Query;
 
 import java.util.List;
 
@@ -11,10 +12,14 @@ import java.util.List;
  */
 public interface DataRepository {
 
-    LiveData<List<NoteEntity>> loadAllNotes();
-    LiveData<NoteEntity> loadNote(int noteId);
-    long insert(NoteEntity note);
+    //Local stuff
+    LiveData<List<NoteEntity>> loadLocalNotes();
+    LiveData<NoteEntity> loadLocalNote(int noteId);
+    long insert(NoteEntity note, boolean isLocal);
     int delete(NoteEntity note);
-
     LiveData<List<NoteEntity>> search(String query);
+
+    //Global stuff
+    Query queryCloudNotes(String userId);
+    Query queryCloudInvitation(String invitationId);
 }

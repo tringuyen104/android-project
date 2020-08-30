@@ -5,12 +5,14 @@ import androidx.room.Fts4;
 import androidx.room.PrimaryKey;
 
 import com.example.zotee.storage.model.Note;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Date;
 
 /**
  * @author thinh.nguyen
  */
+@IgnoreExtraProperties
 @Entity(tableName = "notes")
 public class NoteEntity implements Note {
     @PrimaryKey(autoGenerate = true)
