@@ -3,20 +3,22 @@ package com.example.zotee.activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.zotee.activity.fragment.CloudItemFragment;
 import com.example.zotee.activity.fragment.ItemListFragment;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.zotee.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.Date;
 
@@ -26,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     @Inject
     DataRepository dataRepository;
@@ -36,9 +38,43 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        //Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //
+        FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            private final Fragment[] fragments = new Fragment[]{
+                    new ItemListFragment(),
+                    new CloudItemFragment(),
+            };
+            private final String[] fragmentNames = new String[]{
+                    getString(R.string.individual_note),
+                    getString(R.string.group_note)
+            };
+
+            @Override
+            public Fragment getItem(int position) {
+                return fragments[position];
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.length;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return fragmentNames[position];
+            }
+        };
+
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(pagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -56,13 +92,13 @@ public class HomeActivity extends AppCompatActivity {
                 });
 
 
-        // Add product list note if this is first creation
-        if (savedInstanceState == null) {
-            ItemListFragment fragment = new ItemListFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
-        }
+//        // Add product list note if this is first creation
+//        if (savedInstanceState == null) {
+//            ItemListFragment fragment = new ItemListFragment();
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_container, fragment, "ItemListFragment").commit();
+//        }
     }
 
     @Override
