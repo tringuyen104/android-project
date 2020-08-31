@@ -36,7 +36,6 @@ public class ItemListFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
         noteAdapter = new NoteAdapter((note) -> {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                ItemFragment itemFragment = new ItemFragment();
             }
         });
         binding.itemList.setAdapter(noteAdapter);
