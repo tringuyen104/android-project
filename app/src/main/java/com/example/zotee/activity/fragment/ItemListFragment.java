@@ -7,11 +7,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,7 +19,7 @@ import com.example.zotee.activity.fragment.model.NoteListViewModel;
 import com.example.zotee.activity.recycler.NoteAdapter;
 import com.example.zotee.databinding.ItemListFragmentBinding;
 
-public class ItemListFragment extends Fragment {
+public class ItemListFragment extends BaseActionBarFragment {
 
 
     private ItemListFragmentBinding binding;
@@ -67,6 +66,9 @@ public class ItemListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (searchView.getQuery().length() == 0) {
+                    viewModel.setQuery("");
+                }
                 return false;
             }
         });

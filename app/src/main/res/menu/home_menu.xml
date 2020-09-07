@@ -6,9 +6,19 @@
     <item
         android:id="@+id/app_bar_search"
         android:checked="true"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_baseline_search_24"
         android:orderInCategory="100"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/sign_in_action_bar"
+        android:orderInCategory="101"
+        android:title="Sign In"
+        />
+    <item
+        android:id="@+id/sign_out_action_bar"
+        android:orderInCategory="102"
+        android:title="Logout"
+        />
 </menu>
