@@ -3,6 +3,7 @@ package com.example.zotee.storage;
 import androidx.lifecycle.LiveData;
 
 import com.example.zotee.storage.entity.NoteEntity;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface DataRepository {
     LiveData<List<NoteEntity>> search(String query);
 
     //Global stuff
+    DatabaseReference getLoggedUserDetail(String userId);
+    void createCloudNote(String userId, NoteEntity note);
     Query queryCloudNotes(String userId);
     Query queryCloudInvitation(String invitationId);
 }

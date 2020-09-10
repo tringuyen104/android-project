@@ -9,7 +9,6 @@ import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -17,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
 
 import com.example.zotee.R;
 import com.google.android.material.tabs.TabLayout;
@@ -47,8 +46,7 @@ public class HomeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-
+        View.OnClickListener localFabClick = view -> {
             AsyncTask.execute(() -> {
                 NoteEntity entity = new NoteEntity();
                 entity.setLocationName("SaiGon");
@@ -59,7 +57,18 @@ public class HomeActivity extends BaseActivity {
                 entity.setLng("17");
                 dataRepository.insert(entity, true);
             });
-        });
+        };
+
+        View.OnClickListener onlineFabClick = view -> {
+            NoteEntity entity = new NoteEntity();
+            entity.setLocationName("SaiGon");
+            entity.setTitle("Test");
+            entity.setContent("Content");
+            entity.setDate(new Date());
+            entity.setLat("North");
+            entity.setLng("17");
+            dataRepository.createCloudNote(getUserId(), entity);
+        };
 
         //
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
@@ -98,9 +107,13 @@ public class HomeActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                if(position == 1 && firebaseUser == null) {
-                    fab.hide();
+                if(position == 1 ) {
+                    fab.setOnClickListener(onlineFabClick);
+                    if (firebaseUser == null) {
+                        fab.hide();
+                    }
                 } else {
+                    fab.setOnClickListener(localFabClick);
                     fab.show();
                 }
             }

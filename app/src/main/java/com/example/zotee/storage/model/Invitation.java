@@ -5,9 +5,10 @@ import java.util.List;
 /**
  * @author thinh.nguyen
  */
-public interface Invitation extends Item {
+public interface Invitation {
 
-    int getNoteId();
+    String getNoteId();
+    String getOwnerId();
     List<String> getParticipants();
 
 

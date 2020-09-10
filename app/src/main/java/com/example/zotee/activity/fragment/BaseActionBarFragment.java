@@ -81,7 +81,7 @@ public class BaseActionBarFragment extends Fragment {
         signOutItem.setVisible(logged);
     }
 
-    private void signOut() {
+    protected void signOut() {
         showProgress();
         // Firebase sign out
         auth.signOut();
@@ -164,12 +164,14 @@ public class BaseActionBarFragment extends Fragment {
         if (progressDialog != null) {
             progressDialog.show();
         }
+        onResume();
     }
 
     public void hideProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+        onResume();
     }
 
 }

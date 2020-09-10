@@ -5,9 +5,12 @@ import androidx.room.Fts4;
 import androidx.room.PrimaryKey;
 
 import com.example.zotee.storage.model.Note;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author thinh.nguyen
@@ -78,5 +81,17 @@ public class NoteEntity implements Note {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Exclude
+    public Map<String, Object> toCloudEntity() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("title", title);
+        result.put("content", content);
+        result.put("locationName", locationName);
+        result.put("lat", lat);
+        result.put("lng", lng);
+        result.put("date", date);
+        return result;
     }
 }

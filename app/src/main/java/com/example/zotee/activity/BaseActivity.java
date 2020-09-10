@@ -5,6 +5,8 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * @author thinh.nguyen
  */
@@ -26,5 +28,9 @@ public class BaseActivity extends AppCompatActivity {
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public String getUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }

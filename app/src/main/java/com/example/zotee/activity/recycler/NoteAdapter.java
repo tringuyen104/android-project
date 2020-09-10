@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zotee.R;
 import com.example.zotee.activity.callback.ItemClickCallback;
-import com.example.zotee.databinding.ItemDetailBinding;
+import com.example.zotee.databinding.ItemLineBinding;
 import com.example.zotee.storage.model.Note;
 
 import java.util.List;
@@ -72,8 +72,8 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemDetailBinding binding = DataBindingUtil
-                .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_detail,
+        ItemLineBinding binding = DataBindingUtil
+                .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_line,
                         parent, false);
         binding.setCallback(itemClickCallback);
         return new ItemViewHolder(binding);

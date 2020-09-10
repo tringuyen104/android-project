@@ -1,25 +1,23 @@
 package com.example.zotee.activity.recycler;
 
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.zotee.databinding.ItemDetailBinding;
+import com.example.zotee.databinding.ItemLineBinding;
 
 /**
  * @author thinh.nguyen
  */
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    private final ItemDetailBinding binding;
+    private final ItemLineBinding binding;
 
-    public ItemViewHolder(ItemDetailBinding binding) {
+    public ItemViewHolder(ItemLineBinding binding) {
         super(binding.getRoot());
         this.binding = binding;
     }
 
-    public ItemDetailBinding getBinding() {
+    public ItemLineBinding getBinding() {
         return binding;
     }
 }
