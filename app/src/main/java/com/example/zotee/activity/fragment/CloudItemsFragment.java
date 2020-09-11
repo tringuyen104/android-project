@@ -43,7 +43,8 @@ public class CloudItemsFragment extends BaseActionBarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+
+//        setHasOptionsMenu(true);
         binding = CloudItemsFragmentBinding.inflate(getLayoutInflater());
         binding.signInMainButton.setOnClickListener(view -> signIn());
         binding.itemList.setHasFixedSize(true);

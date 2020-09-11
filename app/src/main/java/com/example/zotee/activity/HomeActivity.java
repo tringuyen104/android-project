@@ -1,5 +1,6 @@
 package com.example.zotee.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -40,7 +41,8 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        Intent in = getIntent();
+        Boolean showSecondTab = in.getBooleanExtra("showGlobal", false);
         //Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,7 +64,7 @@ public class HomeActivity extends BaseActivity {
         View.OnClickListener onlineFabClick = view -> {
             NoteEntity entity = new NoteEntity();
             entity.setLocationName("SaiGon");
-            entity.setTitle("Test");
+            entity.setTitle("Online Test");
             entity.setContent("Content");
             entity.setDate(new Date());
             entity.setLat("North");
@@ -129,7 +131,9 @@ public class HomeActivity extends BaseActivity {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-
+        if(showSecondTab){
+            tabLayout.getTabAt(1).select();
+        }
     }
 
     @Override

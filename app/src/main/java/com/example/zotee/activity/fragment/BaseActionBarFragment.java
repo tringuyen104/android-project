@@ -106,7 +106,7 @@ public class BaseActionBarFragment extends Fragment {
         return auth;
     }
 
-    protected void signIn() {
+    public void signIn() {
         showProgress();
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);

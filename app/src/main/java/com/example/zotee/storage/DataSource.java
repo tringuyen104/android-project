@@ -75,6 +75,11 @@ public class DataSource implements DataRepository {
     }
 
     @Override
+    public Query queryCloudNote(String userId, String noteId) {
+        return databaseReference.child("notes").child(userId).child(noteId);
+    }
+
+    @Override
     public Query queryCloudNotes(String userId) {
         return databaseReference.child("notes").child(userId);
     }
