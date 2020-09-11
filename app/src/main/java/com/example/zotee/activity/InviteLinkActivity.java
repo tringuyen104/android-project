@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -181,25 +182,32 @@ public class InviteLinkActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
                     intent.putExtra("showGlobal", true);
-                    dataRepository.queryCloudNote(snapshot.child("owner_id").getValue().toString(),
-                            snapshot.child("noteId").getValue().toString()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
-                            dataRepository.createCloudNote(auth.getUid(), noteEntity);
-                            startActivity(intent);
-                        }
+                    String userId = auth.getCurrentUser().getUid();
+                    String ownerId = snapshot.child("owner_id").getValue().toString();
+                    String noteId = snapshot.child("noteId").getValue().toString();
+                    if(userId.equalsIgnoreCase(ownerId)) {
+                        Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
+                    } else {
+                        dataRepository.queryCloudNote(ownerId, noteId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
+                                dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity);
+                                startActivity(intent);
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(InviteLinkActivity.this, "Can't load the note", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
 
-                        }
-                    });
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
                 }
             });
 

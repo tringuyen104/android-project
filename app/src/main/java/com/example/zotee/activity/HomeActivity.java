@@ -69,7 +69,7 @@ public class HomeActivity extends BaseActivity {
             entity.setDate(new Date());
             entity.setLat("North");
             entity.setLng("17");
-            dataRepository.createCloudNote(getUserId(), entity);
+            dataRepository.createCloudNote(getUserId(), null,  entity);
         };
 
         //

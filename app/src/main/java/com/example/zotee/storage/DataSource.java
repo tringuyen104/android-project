@@ -60,10 +60,10 @@ public class DataSource implements DataRepository {
     }
 
     @Override
-    public void createCloudNote(String userId, NoteEntity note){
-        String postId = databaseReference.child("notes").child(userId).push().getKey();
+    public void createCloudNote(String userId, String noteId, NoteEntity note){
+        noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
         Map<String, Object> updates = new HashMap<>();
-        updates.put("/notes/"+userId+"/"+postId, note.toCloudEntity());
+        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity());
         databaseReference.updateChildren(updates);
     }
 

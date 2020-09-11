@@ -22,7 +22,7 @@ public interface DataRepository {
 
     //Global stuff
     DatabaseReference getLoggedUserDetail(String userId);
-    void createCloudNote(String userId, NoteEntity note);
+    void createCloudNote(String userId, String noteId, NoteEntity note);
     Query queryCloudNotes(String userId);
     Query queryCloudNote(String userId, String noteId);
     Query queryCloudInvitation(String invitationId);
