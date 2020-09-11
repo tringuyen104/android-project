@@ -2,8 +2,8 @@ package com.example.zotee.storage;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.zotee.storage.dao.CloudDao;
 import com.example.zotee.storage.dao.NoteDao;
+import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
 import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.DatabaseReference;
@@ -67,11 +67,12 @@ public class DataSource implements DataRepository {
         databaseReference.updateChildren(updates);
     }
 
-    public void createCloudInvitation(Invitation invitation){
-/*        String postId = databaseReference.child("notes").child(userId).push().getKey();
+    @Override
+    public void createCloudInvitation(InvitationEntity invitation){
+        String invId = invitation.getId() == null ? databaseReference.child("invitations").push().getKey() : invitation.getId();
         Map<String, Object> updates = new HashMap<>();
-        updates.put("/notes/"+userId+"/"+postId, note.toCloudEntity());
-        databaseReference.updateChildren(updates);*/
+        updates.put("/invitations/"+invId, invitation.toCloudEntity());
+        databaseReference.updateChildren(updates);
     }
 
     @Override

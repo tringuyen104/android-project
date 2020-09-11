@@ -33,10 +33,7 @@ public class ItemListFragment extends BaseActionBarFragment {
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
-        noteAdapter = new NoteAdapter((note) -> {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-            }
-        });
+        noteAdapter = new NoteAdapter();
         binding.itemList.setAdapter(noteAdapter);
         return binding.getRoot();
     }

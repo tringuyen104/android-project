@@ -11,19 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.zotee.R;
+import com.example.zotee.activity.InviteLinkActivity;
 import com.example.zotee.activity.recycler.ItemViewHolder;
 import com.example.zotee.databinding.CloudItemsFragmentBinding;
 import com.example.zotee.databinding.ItemLineBinding;
 import com.example.zotee.storage.DataRepository;
+import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
+import com.example.zotee.storage.model.Invitation;
 import com.example.zotee.storage.model.Note;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DatabaseReference;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -67,13 +74,22 @@ public class CloudItemsFragment extends BaseActionBarFragment {
 
             @Override
             protected void onBindViewHolder(ItemViewHolder viewHolder, int position, final Note model) {
-                final DatabaseReference postRef = getRef(position);
+                final DatabaseReference noteRef = getRef(position);
 
                 // Set click listener for the whole note view
-                final String noteKey = postRef.getKey();
+                final String noteKey = noteRef.getKey();
                 viewHolder.itemView.setOnClickListener(v -> {
+                    //@TODO
                     // on item click
-
+                    InvitationEntity entity = new InvitationEntity();
+                    entity.setNoteId(noteKey);
+                    entity.setOwnerId(getUser().getUid());
+                    List<String> participants = new ArrayList<>();
+                    participants.add("aktv4pro@gmail.com");
+                    participants.add("thinhnguyen6892@gmail.com");
+                    entity.setParticipants(participants);
+                    dataRepository.createCloudInvitation(entity);
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Invitation created", Toast.LENGTH_LONG).show();
                 });
 
                 // Bind to ViewHolder

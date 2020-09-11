@@ -28,7 +28,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,7 +45,7 @@ public class InviteLinkActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth auth;
     private AlertDialog progressDialog;
-    private String code;
+    private EditText inviteCode;
 
     @Inject
     DataRepository dataRepository;
@@ -67,9 +70,9 @@ public class InviteLinkActivity extends AppCompatActivity {
 
         Intent in = getIntent();
         Uri data = in.getData();
-        code = data.getQueryParameter("code");
+        String code = data.getQueryParameter("code");
 
-        EditText inviteCode = findViewById(R.id.inviteInput);
+        inviteCode = findViewById(R.id.inviteInput);
         inviteCode.setText(code);
 
         Button next = findViewById(R.id.getInvited);
@@ -177,30 +180,37 @@ public class InviteLinkActivity extends AppCompatActivity {
 
     protected void toMainActivity() {
         if(auth.getCurrentUser()!= null) {
-            dataRepository.queryCloudInvitation(code).addValueEventListener(new ValueEventListener() {
+            dataRepository.queryCloudInvitation(inviteCode.getText().toString()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
                     intent.putExtra("showGlobal", true);
                     String userId = auth.getCurrentUser().getUid();
-                    String ownerId = snapshot.child("owner_id").getValue().toString();
-                    String noteId = snapshot.child("noteId").getValue().toString();
-                    if(userId.equalsIgnoreCase(ownerId)) {
-                        Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
-                    } else {
-                        dataRepository.queryCloudNote(ownerId, noteId).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
-                                dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity);
-                                startActivity(intent);
-                            }
+                    if(snapshot.child("ownerId").getValue() != null) {
+                        String ownerId = snapshot.child("ownerId").getValue().toString();
+                        String noteId = snapshot.child("noteId").getValue().toString();
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(InviteLinkActivity.this, "Can't load the note", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+
+                        List<String> participants = snapshot.child("participants").getValue(t);
+                        if(userId.equalsIgnoreCase(ownerId) || !participants.contains(auth.getCurrentUser().getEmail())) {
+                            Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
+                        } else {
+                            dataRepository.queryCloudNote(ownerId, noteId).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
+                                    dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        }
+                    } else {
+                        Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -210,7 +220,6 @@ public class InviteLinkActivity extends AppCompatActivity {
                     Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
                 }
             });
-
 
         }
     }

@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class InvitationEntity implements Invitation {
 
+    private String id;
     private String ownerId;
     private String noteId;
     private List<String> participants;
@@ -48,5 +49,13 @@ public class InvitationEntity implements Invitation {
         result.put("noteId", noteId);
         result.put("participants", participants);
         return result;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
