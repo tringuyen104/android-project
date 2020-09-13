@@ -86,6 +86,11 @@ public class DataSource implements DataRepository {
     }
 
     @Override
+    public Query searchCloudNotes(String userId, String query) {
+        return databaseReference.child("notes").child(userId).orderByChild("fts").startAt(query).endAt(query+"\uf8ff");
+    }
+
+    @Override
     public Query queryCloudInvitation(String invitationId) {
         return databaseReference.child("invitations").child(invitationId);
     }

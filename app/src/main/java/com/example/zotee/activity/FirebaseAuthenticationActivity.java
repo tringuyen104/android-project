@@ -1,84 +1,56 @@
-package com.example.zotee.activity.fragment;
+package com.example.zotee.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.zotee.R;
+import com.example.zotee.storage.DataRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import javax.inject.Inject;
+
 /**
  * @author thinh.nguyen
  */
-public class BaseActionBarFragment extends Fragment {
+public abstract class FirebaseAuthenticationActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
-    private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth auth;
+    protected GoogleSignInClient googleSignInClient;
+    protected FirebaseAuth auth;
     private AlertDialog progressDialog;
 
+    @Inject
+    DataRepository dataRepository;
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         auth = FirebaseAuth.getInstance();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso);
-    }
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(getLayoutInflater().inflate(R.layout.progress_dialog, null));
         builder.setCancelable(false);
         progressDialog = builder.create();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        boolean logged = isLogged();
-        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
-        signInItem.setOnMenuItemClickListener(menuItem -> {
-            signIn();
-            return true;
-        });
-        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
-        signOutItem.setOnMenuItemClickListener(menuItem -> {
-            signOut();
-            return true;
-        });
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        boolean logged = isLogged();
-        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
-        signInItem.setVisible(!logged);
-        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
-        signOutItem.setVisible(logged);
     }
 
     protected void signOut() {
@@ -87,12 +59,11 @@ public class BaseActionBarFragment extends Fragment {
         auth.signOut();
 
         // Google sign out
-        googleSignInClient.signOut().addOnCompleteListener(this.requireActivity(),
+        googleSignInClient.signOut().addOnCompleteListener(this,
                 task -> {
-            //TODO
-                    requireActivity().invalidateOptionsMenu();
                     hideProgress();
-                    });
+                    onLoggedOut();
+                });
     }
     protected boolean isLogged(){
         return auth.getCurrentUser() != null;
@@ -100,10 +71,6 @@ public class BaseActionBarFragment extends Fragment {
 
     protected FirebaseUser getUser() {
         return auth.getCurrentUser();
-    }
-
-    protected FirebaseAuth getAuth() {
-        return auth;
     }
 
     public void signIn() {
@@ -137,28 +104,25 @@ public class BaseActionBarFragment extends Fragment {
         // [START_EXCLUDE silent]
         // [END_EXCLUDE]
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        getAuth().signInWithCredential(credential)
-                .addOnCompleteListener(this.requireActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "signInWithCredential:success");
-                            hideProgress();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            hideProgress();
-                        }
-
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAG", "signInWithCredential:success");
+                        onLoggedIn();
+                        hideProgress();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("TAG", "signInWithCredential:failure", task.getException());
+                        hideProgress();
                     }
+
                 });
         if(isLogged()) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            this.getSupportFragmentManager().popBackStack();
         }
-
     }
+
 
     public void showProgress() {
         if (progressDialog != null) {
@@ -174,4 +138,10 @@ public class BaseActionBarFragment extends Fragment {
         onResume();
     }
 
+    public String getUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    abstract void onLoggedIn();
+    abstract void onLoggedOut();
 }

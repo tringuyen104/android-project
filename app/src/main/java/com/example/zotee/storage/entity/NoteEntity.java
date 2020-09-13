@@ -79,6 +79,10 @@ public class NoteEntity implements Note {
         return id;
     }
 
+    public String getFts() {
+        return String.format("%s %s %s", title, content, locationName);
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -87,6 +91,7 @@ public class NoteEntity implements Note {
     public Map<String, Object> toCloudEntity() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("title", title);
+        result.put("fts", String.format("%s %s %s", title, content, locationName));
         result.put("content", content);
         result.put("locationName", locationName);
         result.put("lat", lat);

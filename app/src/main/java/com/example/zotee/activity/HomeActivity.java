@@ -32,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends FirebaseAuthenticationActivity {
 
     @Inject
     DataRepository dataRepository;
@@ -86,7 +86,8 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public Fragment getItem(int position) {
-                return fragments[position];
+                Fragment fragment = fragments[position];
+                return fragment;
             }
 
             @Override
@@ -140,12 +141,44 @@ public class HomeActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_menu, menu);
-        return true;
+        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
+        signInItem.setOnMenuItemClickListener(menuItem -> {
+            signIn();
+            return true;
+        });
+        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
+        signOutItem.setOnMenuItemClickListener(menuItem -> {
+            signOut();
+            return true;
+        });
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean logged = isLogged();
+        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
+        signInItem.setVisible(!logged);
+        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
+        signOutItem.setVisible(logged);
+        return true;
+    }
+
+
+    @Override
+    void onLoggedIn() {
+
+    }
+
+    @Override
+    void onLoggedOut() {
+
     }
 }

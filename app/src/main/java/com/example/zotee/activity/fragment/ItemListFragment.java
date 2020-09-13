@@ -2,8 +2,6 @@ package com.example.zotee.activity.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.zotee.R;
@@ -19,7 +16,7 @@ import com.example.zotee.activity.fragment.model.NoteListViewModel;
 import com.example.zotee.activity.recycler.NoteAdapter;
 import com.example.zotee.databinding.ItemListFragmentBinding;
 
-public class ItemListFragment extends BaseActionBarFragment {
+public class ItemListFragment extends SearchableActionBarFragment {
 
 
     private ItemListFragmentBinding binding;
@@ -29,9 +26,6 @@ public class ItemListFragment extends BaseActionBarFragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
         noteAdapter = new NoteAdapter();
         binding.itemList.setAdapter(noteAdapter);
@@ -51,10 +45,8 @@ public class ItemListFragment extends BaseActionBarFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        MenuItem item = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    public SearchView.OnQueryTextListener getSearchQueryListener() {
+        return new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 viewModel.setQuery(s);
@@ -63,14 +55,15 @@ public class ItemListFragment extends BaseActionBarFragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (searchView.getQuery().length() == 0) {
+                if (s.length() == 0) {
                     viewModel.setQuery("");
                 }
                 return false;
             }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
+
+        };
     }
+
 
     @Override
     public void onDestroyView() {

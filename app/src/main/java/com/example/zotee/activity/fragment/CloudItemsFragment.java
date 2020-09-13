@@ -1,32 +1,38 @@
 package com.example.zotee.activity.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.zotee.R;
-import com.example.zotee.activity.InviteLinkActivity;
 import com.example.zotee.activity.recycler.ItemViewHolder;
 import com.example.zotee.databinding.CloudItemsFragmentBinding;
 import com.example.zotee.databinding.ItemLineBinding;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
-import com.example.zotee.storage.model.Invitation;
 import com.example.zotee.storage.model.Note;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
@@ -37,7 +43,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class CloudItemsFragment extends BaseActionBarFragment {
+public class CloudItemsFragment extends SearchableActionBarFragment {
 
     @Inject
     DataRepository dataRepository;
@@ -59,6 +65,10 @@ public class CloudItemsFragment extends BaseActionBarFragment {
         return binding.getRoot();
     }
     private void initAdapter() {
+        initAdapter(null);
+    }
+
+    private void initAdapter(final String filter) {
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<NoteEntity>()
                 .setQuery(dataRepository.queryCloudNotes(getUser().getUid()), NoteEntity.class)
 //                .setQuery(dataRepository.queryCloudNotes(getUser().getUid()), NoteEntity.class)
@@ -75,7 +85,6 @@ public class CloudItemsFragment extends BaseActionBarFragment {
             @Override
             protected void onBindViewHolder(ItemViewHolder viewHolder, int position, final Note model) {
                 final DatabaseReference noteRef = getRef(position);
-
                 // Set click listener for the whole note view
                 final String noteKey = noteRef.getKey();
                 viewHolder.itemView.setOnClickListener(v -> {
@@ -94,6 +103,10 @@ public class CloudItemsFragment extends BaseActionBarFragment {
 
                 // Bind to ViewHolder
                 viewHolder.getBinding().setItem(model);
+                if(!Strings.isEmptyOrWhitespace(filter) && !Strings.isEmptyOrWhitespace(model.getFts()) && !model.getFts().toLowerCase().contains(filter.toLowerCase())) {
+                    viewHolder.itemView.setVisibility(LinearLayout.GONE);
+                    viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+                }
             }
         };
         binding.itemList.setAdapter(adapter);
@@ -136,6 +149,27 @@ public class CloudItemsFragment extends BaseActionBarFragment {
             adapter.stopListening();
             adapter = null;
         }
+    }
+
+    @Override
+    public SearchView.OnQueryTextListener getSearchQueryListener() {
+        return new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (!Strings.isEmptyOrWhitespace(query)) {
+                    initAdapter(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() == 0) {
+                    initAdapter();
+                }
+                return false;
+            }
+        };
     }
 
     @Override
