@@ -90,19 +90,23 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                 viewHolder.itemView.setOnClickListener(v -> {
                     //@TODO
                     // on item click
-                    InvitationEntity entity = new InvitationEntity();
+/*                    InvitationEntity entity = new InvitationEntity();
                     entity.setNoteId(noteKey);
                     entity.setOwnerId(getUser().getUid());
                     List<String> participants = new ArrayList<>();
                     participants.add("aktv4pro@gmail.com");
                     participants.add("thinhnguyen6892@gmail.com");
                     entity.setParticipants(participants);
-                    dataRepository.createCloudInvitation(entity);
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Invitation created", Toast.LENGTH_LONG).show();
+                    dataRepository.createCloudInvitation(entity);*/
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+position, Toast.LENGTH_LONG).show();
                 });
 
                 // Bind to ViewHolder
                 viewHolder.getBinding().setItem(model);
+                viewHolder.getBinding().itemActionIcon.setImageResource(R.drawable.ic_baseline_person_add_24);
+                viewHolder.getBinding().itemActionIcon.setOnClickListener(view -> {
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Invite selected", Toast.LENGTH_LONG).show();
+                });
                 if(!Strings.isEmptyOrWhitespace(filter) && !Strings.isEmptyOrWhitespace(model.getFts()) && !model.getFts().toLowerCase().contains(filter.toLowerCase())) {
                     viewHolder.itemView.setVisibility(LinearLayout.GONE);
                     viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));

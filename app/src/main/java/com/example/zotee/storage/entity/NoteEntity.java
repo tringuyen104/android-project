@@ -8,6 +8,7 @@ import com.example.zotee.storage.model.Note;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +70,20 @@ public class NoteEntity implements Note {
 
     public Date getDate() {
         return date;
+    }
+
+    @Exclude
+    @Override
+    public String getDateText() {
+        if(date == null) date = new Date();
+        return DateFormat.getDateInstance(DateFormat.MEDIUM).format(date);
+    }
+
+    @Exclude
+    @Override
+    public String getTimeText() {
+        if(date == null) date = new Date();
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
     }
 
     public void setDate(Date date) {

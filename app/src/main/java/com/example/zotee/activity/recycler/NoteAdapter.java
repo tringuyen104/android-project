@@ -81,6 +81,9 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
         holder.itemView.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Selected:" + items.get(position).getId(), Toast.LENGTH_LONG).show();
         });
+        holder.getBinding().itemActionIcon.setOnClickListener(view -> {
+            Toast.makeText(view.getContext(), "Share selected", Toast.LENGTH_LONG).show();
+        });
         holder.getBinding().setItem(items.get(position));
         holder.getBinding().executePendingBindings();
     }
