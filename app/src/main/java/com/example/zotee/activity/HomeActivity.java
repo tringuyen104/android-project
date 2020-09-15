@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.example.zotee.activity.fragment.CloudItemsFragment;
 import com.example.zotee.activity.fragment.ItemListFragment;
 import com.example.zotee.storage.DataRepository;
-import com.example.zotee.storage.entity.NoteEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.widget.Toolbar;
@@ -50,26 +49,20 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         View.OnClickListener localFabClick = view -> {
             AsyncTask.execute(() -> {
-                NoteEntity entity = new NoteEntity();
-                entity.setLocationName("SaiGon");
-                entity.setTitle("Test");
-                entity.setContent("Content");
-                entity.setDate(new Date());
-                entity.setLat("North");
-                entity.setLng("17");
-                dataRepository.insert(entity, true);
+                Intent intent = new Intent(HomeActivity.this, EventDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Key_1", "fab");
+                intent.putExtras(bundle);
+                startActivity(intent);
             });
         };
 
         View.OnClickListener onlineFabClick = view -> {
-            NoteEntity entity = new NoteEntity();
-            entity.setLocationName("SaiGon");
-            entity.setTitle("Online Test");
-            entity.setContent("Content");
-            entity.setDate(new Date());
-            entity.setLat("North");
-            entity.setLng("17");
-            dataRepository.createCloudNote(getUserId(), null,  entity);
+            Intent intent = new Intent(HomeActivity.this, EventDetailsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("Key_2", "fab");
+            intent.putExtras(bundle);
+            startActivity(intent);
         };
 
         //
@@ -123,7 +116,7 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                
+
             }
 
             @Override
