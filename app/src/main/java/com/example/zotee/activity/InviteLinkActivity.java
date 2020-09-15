@@ -41,13 +41,13 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
         inviteCode.setText(code);
 
         Button next = findViewById(R.id.getInvited);
-        if(auth.getCurrentUser() != null) {
-            next.setOnClickListener(view -> {
+        next.setOnClickListener(view -> {
+            if(auth.getCurrentUser() != null) {
                 toMainActivity();
-            });
-        } else {
-            next.setOnClickListener(view -> signIn());
-        }
+            } else {
+                signIn();
+            }
+        });
     }
 
     @Override
@@ -66,8 +66,6 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
             dataRepository.queryCloudInvitation(inviteCode.getText().toString()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
-                    intent.putExtra("showGlobal", true);
                     String userId = auth.getCurrentUser().getUid();
                     if(snapshot.child("ownerId").getValue() != null) {
                         String ownerId = snapshot.child("ownerId").getValue().toString();
@@ -84,6 +82,8 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
                                     dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity);
+                                    Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
+                                    intent.putExtra("showGlobal", true);
                                     startActivity(intent);
                                 }
 

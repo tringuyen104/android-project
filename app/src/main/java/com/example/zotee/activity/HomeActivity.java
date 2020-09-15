@@ -24,8 +24,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -132,19 +130,19 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
     }
 
     @Override
+    void onLoggedIn() {
+
+    }
+
+    @Override
+    void onLoggedOut() {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_menu, menu);
-        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
-        signInItem.setOnMenuItemClickListener(menuItem -> {
-            signIn();
-            return true;
-        });
-        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
-        signOutItem.setOnMenuItemClickListener(menuItem -> {
-            signOut();
-            return true;
-        });
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -163,16 +161,5 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
         MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
         signOutItem.setVisible(logged);
         return true;
-    }
-
-
-    @Override
-    void onLoggedIn() {
-
-    }
-
-    @Override
-    void onLoggedOut() {
-
     }
 }

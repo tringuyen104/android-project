@@ -64,6 +64,16 @@ public class ItemListFragment extends SearchableActionBarFragment {
         };
     }
 
+    @Override
+    void onLoggedIn() {
+
+    }
+
+    @Override
+    void onLoggedOut() {
+
+    }
+
 
     @Override
     public void onDestroyView() {

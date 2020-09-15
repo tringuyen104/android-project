@@ -177,6 +177,16 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
     }
 
     @Override
+    void onLoggedIn() {
+
+    }
+
+    @Override
+    void onLoggedOut() {
+        onResume();
+    }
+
+    @Override
     public void onResume() {
         if(isLogged()) {
             binding.signIn.setVisibility(LinearLayout.GONE);

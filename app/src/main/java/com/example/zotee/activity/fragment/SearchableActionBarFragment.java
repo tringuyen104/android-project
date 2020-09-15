@@ -66,6 +66,17 @@ public abstract class SearchableActionBarFragment extends Fragment {
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(getSearchQueryListener());
+
+        MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
+        signInItem.setOnMenuItemClickListener(menuItem -> {
+            signIn();
+            return true;
+        });
+        MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
+        signOutItem.setOnMenuItemClickListener(menuItem -> {
+            signOut();
+            return true;
+        });
     }
 
     protected void signOut() {
@@ -79,6 +90,7 @@ public abstract class SearchableActionBarFragment extends Fragment {
             //TODO
                     requireActivity().invalidateOptionsMenu();
                     hideProgress();
+                    onLoggedOut();
                     });
     }
     protected boolean isLogged(){
@@ -132,7 +144,7 @@ public abstract class SearchableActionBarFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "signInWithCredential:success");
                             hideProgress();
-
+                            onLoggedIn();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
@@ -162,4 +174,7 @@ public abstract class SearchableActionBarFragment extends Fragment {
     }
 
     public abstract SearchView.OnQueryTextListener getSearchQueryListener();
+
+    abstract void onLoggedIn();
+    abstract void onLoggedOut();
 }
