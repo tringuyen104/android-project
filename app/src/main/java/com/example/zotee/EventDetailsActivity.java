@@ -111,7 +111,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         }
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
-                        dataRepository.insert(entity);
+                        dataRepository.insert(entity, true);
                         Log.d("TAG", "onCreate: " + entity.getTitle());
                     });
                     getCurrentLocation();

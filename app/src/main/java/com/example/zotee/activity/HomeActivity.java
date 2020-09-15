@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.activity.fragment.CloudItemsFragment;
 import com.example.zotee.activity.fragment.ItemListFragment;
 import com.example.zotee.storage.DataRepository;
