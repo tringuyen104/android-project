@@ -15,4 +15,5 @@ public interface Note extends Item {
     String getDateText();
     String getTimeText();
     String getFts();
+    String getInvitationId();
 }

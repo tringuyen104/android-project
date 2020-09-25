@@ -48,6 +48,11 @@ public class DataSource implements DataRepository {
     }
 
     @Override
+    public int update(NoteEntity note) {
+        return noteDao.update(note);
+    }
+
+    @Override
     public int delete(NoteEntity note) {
         return noteDao.delete(note);
     }
@@ -63,19 +68,22 @@ public class DataSource implements DataRepository {
     }
 
     @Override
-    public void createCloudNote(String userId, String noteId, NoteEntity note){
+    public String createCloudNote(String userId, String noteId, NoteEntity note){
         noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
         Map<String, Object> updates = new HashMap<>();
         updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity());
         databaseReference.updateChildren(updates);
+        return noteId;
     }
 
     @Override
-    public void createCloudInvitation(InvitationEntity invitation){
+    public InvitationEntity createCloudInvitation(InvitationEntity invitation){
         String invId = invitation.getId() == null ? databaseReference.child("invitations").push().getKey() : invitation.getId();
         Map<String, Object> updates = new HashMap<>();
         updates.put("/invitations/"+invId, invitation.toCloudEntity());
         databaseReference.updateChildren(updates);
+        invitation.setId(invId);
+        return invitation;
     }
 
     @Override

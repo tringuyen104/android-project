@@ -156,6 +156,9 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean logged = isLogged();
+        MenuItem accountItem = menu.findItem(R.id.accountMenu);
+        accountItem.setVisible(logged);
+        if(logged) accountItem.setTitle("Hello, "+getUser().getDisplayName());
         MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
         signInItem.setVisible(!logged);
         MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);

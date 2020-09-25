@@ -2,6 +2,7 @@ package com.example.zotee.storage.entity;
 
 import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * @author thinh.nguyen
  */
+@IgnoreExtraProperties
 public class InvitationEntity implements Invitation {
 
     private String id;

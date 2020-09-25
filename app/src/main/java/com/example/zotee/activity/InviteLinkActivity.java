@@ -74,7 +74,7 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                         GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
 
                         List<String> participants = snapshot.child("participants").getValue(t);
-                        if(userId.equalsIgnoreCase(ownerId) || !participants.contains(auth.getCurrentUser().getEmail())) {
+                        if(userId.equalsIgnoreCase(ownerId)) {
                             Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
                         } else {
                             dataRepository.queryCloudNote(ownerId, noteId).addValueEventListener(new ValueEventListener() {
