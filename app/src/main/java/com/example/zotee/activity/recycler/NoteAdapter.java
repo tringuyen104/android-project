@@ -1,6 +1,8 @@
 package com.example.zotee.activity.recycler;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.zotee.EditDetailsActivity;
 import com.example.zotee.R;
 import com.example.zotee.activity.callback.ItemClickCallback;
 import com.example.zotee.activity.fragment.CloudItemsFragment;
@@ -81,14 +84,39 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         holder.itemView.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Selected:" + items.get(position).getId(), Toast.LENGTH_LONG).show();
-
+            AsyncTask.execute(() -> {
+                Intent intent = new Intent(view.getContext(), EditDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", items.get(position).getId());
+                bundle.putString("event_name", items.get(position).getTitle());
+                bundle.putString("Date", items.get(position).getDateText());
+                bundle.putString("Time", items.get(position).getTimeText());
+                bundle.putString("DesName", items.get(position).getLocationName());
+                bundle.putString("Content", items.get(position).getContent());
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            });
         });
         holder.getBinding().itemActionIcon.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Share selected", Toast.LENGTH_LONG).show();
+            AsyncTask.execute(() -> {
+                Intent intent = new Intent(view.getContext(), EditDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", items.get(position).getId());
+                bundle.putString("event_name", items.get(position).getTitle());
+                bundle.putString("Date", items.get(position).getDateText());
+                bundle.putString("Time", items.get(position).getTimeText());
+                bundle.putString("DesName", items.get(position).getLocationName());
+                bundle.putString("Content", items.get(position).getContent());
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            });
         });
         holder.getBinding().setItem(items.get(position));
         holder.getBinding().executePendingBindings();
     }
+
+
 
     @Override
     public int getItemCount() {

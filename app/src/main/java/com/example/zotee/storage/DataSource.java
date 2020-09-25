@@ -35,6 +35,9 @@ public class DataSource implements DataRepository {
     }
 
     @Override
+    public int update(NoteEntity note) { return noteDao.update(note); }
+
+    @Override
     public LiveData<NoteEntity> loadLocalNote(int noteId) {
         return noteDao.loadNote(noteId);
     }
