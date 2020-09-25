@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import com.example.zotee.storage.dao.NoteDao;
 import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
-import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -45,11 +44,6 @@ public class DataSource implements DataRepository {
     @Override
     public long insert(NoteEntity note, boolean isLocal) {
         return noteDao.insert(note);
-    }
-
-    @Override
-    public int update(NoteEntity note) {
-        return noteDao.update(note);
     }
 
     @Override

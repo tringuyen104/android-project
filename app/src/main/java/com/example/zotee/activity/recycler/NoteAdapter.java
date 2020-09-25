@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.zotee.EditDetailsActivity;
 import com.example.zotee.R;
 import com.example.zotee.activity.callback.ItemClickCallback;
 import com.example.zotee.activity.message.MessageGenerator;

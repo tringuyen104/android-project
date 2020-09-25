@@ -21,7 +21,6 @@ public interface DataRepository {
     long insert(NoteEntity note, boolean isLocal);
     int update(NoteEntity note);
     int delete(NoteEntity note);
-    int update(NoteEntity note);
     LiveData<List<NoteEntity>> search(String query);
 
     //Global stuff
