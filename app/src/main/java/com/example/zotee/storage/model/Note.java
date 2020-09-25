@@ -12,4 +12,7 @@ public interface Note extends Item {
     String getLat();
     String getLng();
     Date getDate();
+    String getDateText();
+    String getTimeText();
+    String getFts();
 }

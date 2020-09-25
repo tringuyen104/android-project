@@ -13,11 +13,13 @@ import androidx.room.Fts4;
 public class NoteFtsEntity {
 
     private String title;
+    private String locationName;
     private String content;
 
-    public NoteFtsEntity(String title, String content) {
+    public NoteFtsEntity(String title, String content, String locationName) {
         this.title = title;
         this.content = content;
+        this.locationName = locationName;
     }
 
     public String getTitle() {
@@ -28,4 +30,7 @@ public class NoteFtsEntity {
         return content;
     }
 
+    public String getLocationName() {
+        return locationName;
+    }
 }

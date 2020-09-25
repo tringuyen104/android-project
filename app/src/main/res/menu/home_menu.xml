@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_home_menu">
+
+    <item
+        android:id="@+id/app_bar_search"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:orderInCategory="101"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item android:title="Account"
+        android:orderInCategory="102"
+        android:icon="@drawable/ic_baseline_person_24"
+        app:showAsAction="always">
+        <menu app:showAsAction="always">
+            <item
+                android:id="@+id/sign_in_action_bar"
+                android:orderInCategory="103"
+                android:title="Sign In"
+                />
+            <item
+                android:id="@+id/sign_out_action_bar"
+                android:orderInCategory="104"
+                android:title="Logout"/>
+        </menu>
+    </item>
+
+</menu>

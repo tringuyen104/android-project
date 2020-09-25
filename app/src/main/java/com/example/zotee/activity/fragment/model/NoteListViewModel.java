@@ -34,7 +34,7 @@ public class NoteListViewModel extends ViewModel {
                 savedStateHandle.getLiveData("QUERY", null),
                 (Function<CharSequence, LiveData<List<NoteEntity>>>) query -> {
                     if (TextUtils.isEmpty(query)) {
-                        return dataRepository.loadAllNotes();
+                        return dataRepository.loadLocalNotes();
                     }
                     return dataRepository.search("*" + query + "*");
                 });

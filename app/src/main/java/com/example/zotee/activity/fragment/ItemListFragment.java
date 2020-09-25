@@ -1,15 +1,14 @@
 package com.example.zotee.activity.fragment;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.zotee.R;
@@ -17,36 +16,25 @@ import com.example.zotee.activity.fragment.model.NoteListViewModel;
 import com.example.zotee.activity.recycler.NoteAdapter;
 import com.example.zotee.databinding.ItemListFragmentBinding;
 
-public class ItemListFragment extends Fragment {
+public class ItemListFragment extends SearchableActionBarFragment {
 
 
     private ItemListFragmentBinding binding;
     private NoteAdapter noteAdapter;
-
+    private NoteListViewModel viewModel;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
-        noteAdapter = new NoteAdapter((note) -> {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                ItemFragment itemFragment = new ItemFragment();
-            }
-        });
+        noteAdapter = new NoteAdapter();
         binding.itemList.setAdapter(noteAdapter);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final NoteListViewModel viewModel =
-                new ViewModelProvider(requireActivity()).get(NoteListViewModel.class);
-
-        binding.searchBtn.setOnClickListener(v -> {
-            Editable query = binding.searchBox.getText();
-            viewModel.setQuery(query);
-        });
+        viewModel = new ViewModelProvider(requireActivity()).get(NoteListViewModel.class);
 
         viewModel.getData().observe(getViewLifecycleOwner(), noteEntities -> {
             if (noteEntities != null) {
@@ -55,6 +43,37 @@ public class ItemListFragment extends Fragment {
             binding.executePendingBindings();
         });
     }
+
+    @Override
+    public SearchView.OnQueryTextListener getSearchQueryListener() {
+        return new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                viewModel.setQuery(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.length() == 0) {
+                    viewModel.setQuery("");
+                }
+                return false;
+            }
+
+        };
+    }
+
+    @Override
+    void onLoggedIn() {
+
+    }
+
+    @Override
+    void onLoggedOut() {
+
+    }
+
 
     @Override
     public void onDestroyView() {

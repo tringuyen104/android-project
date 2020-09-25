@@ -5,12 +5,18 @@ import androidx.room.Fts4;
 import androidx.room.PrimaryKey;
 
 import com.example.zotee.storage.model.Note;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author thinh.nguyen
  */
+@IgnoreExtraProperties
 @Entity(tableName = "notes")
 public class NoteEntity implements Note {
     @PrimaryKey(autoGenerate = true)
@@ -66,6 +72,20 @@ public class NoteEntity implements Note {
         return date;
     }
 
+    @Exclude
+    @Override
+    public String getDateText() {
+        if(date == null) date = new Date();
+        return DateFormat.getDateInstance(DateFormat.MEDIUM).format(date);
+    }
+
+    @Exclude
+    @Override
+    public String getTimeText() {
+        if(date == null) date = new Date();
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }
@@ -74,7 +94,24 @@ public class NoteEntity implements Note {
         return id;
     }
 
+    public String getFts() {
+        return String.format("%s %s %s", title, content, locationName);
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Exclude
+    public Map<String, Object> toCloudEntity() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("title", title);
+        result.put("fts", String.format("%s %s %s", title, content, locationName));
+        result.put("content", content);
+        result.put("locationName", locationName);
+        result.put("lat", lat);
+        result.put("lng", lng);
+        result.put("date", date);
+        return result;
     }
 }

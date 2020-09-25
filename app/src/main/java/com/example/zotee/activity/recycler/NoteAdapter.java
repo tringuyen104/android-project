@@ -2,6 +2,7 @@ package com.example.zotee.activity.recycler;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zotee.R;
 import com.example.zotee.activity.callback.ItemClickCallback;
-import com.example.zotee.databinding.ItemDetailBinding;
+import com.example.zotee.activity.fragment.CloudItemsFragment;
+import com.example.zotee.databinding.ItemLineBinding;
 import com.example.zotee.storage.model.Note;
 
 import java.util.List;
@@ -24,11 +26,7 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
 
     List<? extends Note> items;
 
-    @Nullable
-    private final ItemClickCallback<? extends Note> itemClickCallback;
-
-    public NoteAdapter(@Nullable ItemClickCallback<? extends Note> clickCallback) {
-        itemClickCallback = clickCallback;
+    public NoteAdapter() {
         setHasStableIds(true);
     }
 
@@ -72,15 +70,20 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemDetailBinding binding = DataBindingUtil
-                .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_detail,
+        ItemLineBinding binding = DataBindingUtil
+                .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_line,
                         parent, false);
-        binding.setCallback(itemClickCallback);
         return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(view -> {
+            Toast.makeText(view.getContext(), "Selected:" + items.get(position).getId(), Toast.LENGTH_LONG).show();
+        });
+        holder.getBinding().itemActionIcon.setOnClickListener(view -> {
+            Toast.makeText(view.getContext(), "Share selected", Toast.LENGTH_LONG).show();
+        });
         holder.getBinding().setItem(items.get(position));
         holder.getBinding().executePendingBindings();
     }

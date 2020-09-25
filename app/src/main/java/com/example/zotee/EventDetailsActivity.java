@@ -111,7 +111,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         }
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
-                        dataRepository.insert(entity);
+                        dataRepository.insert(entity, true);
                         Log.d("TAG", "onCreate: " + entity.getTitle());
                     });
                     getCurrentLocation();
@@ -156,7 +156,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = location;
-                    sSource = currentLocation.getLongitude() + "," + currentLocation.getLatitude();
+                    sSource = currentLocation.getLatitude()+ "," + currentLocation.getLongitude();
 
 //                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude()
 //                            + "  " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
@@ -174,10 +174,11 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
             Uri uri = Uri.parse("https://www.google.co.in/maps/dir/" + sSource + "/" + sDes
             );
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            uri = null;
             //set package
             intent.setPackage("com.google.android.apps.maps");
             //set flag
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //start activity
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -188,5 +189,6 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
             //start activity
             startActivity(intent);
         }
+
     }
 }
