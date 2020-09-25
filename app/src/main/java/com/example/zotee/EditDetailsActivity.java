@@ -68,7 +68,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_event_details);
+        setContentView(R.layout.event_edit_detail_activity);
 
         btnSetPath = (Button) findViewById(R.id.bt_track_path);
         eventName = (EditText) findViewById(R.id.event_name);

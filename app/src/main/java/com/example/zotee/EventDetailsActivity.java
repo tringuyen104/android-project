@@ -121,7 +121,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
                         dataRepository.insert(entity, true);
-                        Log.d("TAG", "onCreate: " + entity.getTitle());
+                        Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date);
                     });
                     getCurrentLocation();
                     DisplayTrack(sSource, sDes);
@@ -146,7 +146,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         myHour = hourOfDay;
         myMinute = minute;
-        txtTime.setText(myDay + "/" + myMonth + "/" + myYear + "   " + myHour + ":" + myMinute);
+        txtTime.setText(myDay + "/" + (myMonth + 1) + "/" + myYear + "   " + myHour + ":" + myMinute);
     }
 
     private void getCurrentLocation() {
