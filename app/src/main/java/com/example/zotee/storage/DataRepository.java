@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 
 import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
-import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
@@ -19,7 +18,6 @@ public interface DataRepository {
     LiveData<List<NoteEntity>> loadLocalNotes();
     LiveData<NoteEntity> loadLocalNote(int noteId);
     long insert(NoteEntity note, boolean isLocal);
-    int update(NoteEntity note);
     int delete(NoteEntity note);
     int update(NoteEntity note);
     LiveData<List<NoteEntity>> search(String query);
