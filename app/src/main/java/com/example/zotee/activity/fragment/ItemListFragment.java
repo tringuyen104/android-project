@@ -15,9 +15,17 @@ import com.example.zotee.R;
 import com.example.zotee.activity.fragment.model.NoteListViewModel;
 import com.example.zotee.activity.recycler.NoteAdapter;
 import com.example.zotee.databinding.ItemListFragmentBinding;
+import com.example.zotee.storage.DataRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ItemListFragment extends SearchableActionBarFragment {
 
+    @Inject
+    DataRepository dataRepository;
 
     private ItemListFragmentBinding binding;
     private NoteAdapter noteAdapter;
@@ -27,7 +35,7 @@ public class ItemListFragment extends SearchableActionBarFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.item_list_fragment, container, false);
-        noteAdapter = new NoteAdapter();
+        noteAdapter = new NoteAdapter(dataRepository);
         binding.itemList.setAdapter(noteAdapter);
         return binding.getRoot();
     }

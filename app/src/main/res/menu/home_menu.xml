@@ -11,11 +11,19 @@
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
-    <item android:title="Account"
+    <item
+        android:title="Account"
         android:orderInCategory="102"
         android:icon="@drawable/ic_baseline_person_24"
         app:showAsAction="always">
-        <menu app:showAsAction="always">
+        <menu
+            app:showAsAction="always">
+            <item
+                android:id="@+id/accountMenu"
+                android:orderInCategory="102"
+                android:enabled="false"
+                android:title="Hello"
+                />
             <item
                 android:id="@+id/sign_in_action_bar"
                 android:orderInCategory="103"

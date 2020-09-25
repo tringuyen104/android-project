@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import com.example.zotee.storage.dao.NoteDao;
 import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
-import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -63,19 +62,22 @@ public class DataSource implements DataRepository {
     }
 
     @Override
-    public void createCloudNote(String userId, String noteId, NoteEntity note){
+    public String createCloudNote(String userId, String noteId, NoteEntity note){
         noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
         Map<String, Object> updates = new HashMap<>();
         updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity());
         databaseReference.updateChildren(updates);
+        return noteId;
     }
 
     @Override
-    public void createCloudInvitation(InvitationEntity invitation){
+    public InvitationEntity createCloudInvitation(InvitationEntity invitation){
         String invId = invitation.getId() == null ? databaseReference.child("invitations").push().getKey() : invitation.getId();
         Map<String, Object> updates = new HashMap<>();
         updates.put("/invitations/"+invId, invitation.toCloudEntity());
         databaseReference.updateChildren(updates);
+        invitation.setId(invId);
+        return invitation;
     }
 
     @Override

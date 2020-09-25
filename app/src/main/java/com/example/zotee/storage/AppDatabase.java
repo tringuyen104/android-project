@@ -12,7 +12,7 @@ import com.example.zotee.storage.entity.NoteFtsEntity;
 /**
  * @author thinh.nguyen
  */
-@Database(entities = {NoteEntity.class, NoteFtsEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {NoteEntity.class, NoteFtsEntity.class}, version = 3, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

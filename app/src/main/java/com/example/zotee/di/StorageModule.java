@@ -40,7 +40,13 @@ public class StorageModule {
                         database.execSQL("INSERT INTO notesFts (`rowid`, `title`, `content`, `locationName`) "
                                 + "SELECT `id`, `title`, `content`, `locationName` FROM notes");
                     }
-                })
+                },
+                        new Migration(2, 3) {
+                            @Override
+                            public void migrate(@NonNull SupportSQLiteDatabase database) {
+                                database.execSQL("ALTER TABLE `notes` ADD `invitationId` TEXT");
+                            }
+                        })
                 .fallbackToDestructiveMigration()
                 .build();
     }

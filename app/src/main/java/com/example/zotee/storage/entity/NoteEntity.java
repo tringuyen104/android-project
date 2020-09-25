@@ -27,6 +27,7 @@ public class NoteEntity implements Note {
     private String lat;
     private String lng;
     private Date date;
+    private String invitationId;
 
     public String getTitle() {
         return title;
@@ -112,6 +113,16 @@ public class NoteEntity implements Note {
         result.put("lat", lat);
         result.put("lng", lng);
         result.put("date", date);
+        result.put("invitationId", invitationId);
         return result;
+    }
+
+
+    public String getInvitationId() {
+        return invitationId;
+    }
+
+    public void setInvitationId(String invitationId) {
+        this.invitationId = invitationId;
     }
 }

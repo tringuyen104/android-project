@@ -49,7 +49,6 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
     DataRepository dataRepository;
 
     private CloudItemsFragmentBinding binding;
-    private BottomSheetDialog bottomSheetDialog;
 
     private FirebaseRecyclerAdapter<Note, ItemViewHolder> adapter;
 
@@ -123,12 +122,6 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
         if(isLogged()) {
             initAdapter();
         }
-       /* bottomSheetDialog = new BottomSheetDialog(this.requireActivity(), R.style.BottomSheetStyleDialogTheme);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.sigin_dialog, view.findViewById(R.id.bottomSheetContainer));
-        bottomSheetView.findViewById(R.id.sign_in_button).setOnClickListener(views -> {
-            signIn();
-        });
-        bottomSheetDialog.setContentView(bottomSheetView);*/
     }
 
     @Override

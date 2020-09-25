@@ -19,16 +19,17 @@ public interface DataRepository {
     LiveData<List<NoteEntity>> loadLocalNotes();
     LiveData<NoteEntity> loadLocalNote(int noteId);
     long insert(NoteEntity note, boolean isLocal);
+    int update(NoteEntity note);
     int delete(NoteEntity note);
     int update(NoteEntity note);
     LiveData<List<NoteEntity>> search(String query);
 
     //Global stuff
     DatabaseReference getLoggedUserDetail(String userId);
-    void createCloudNote(String userId, String noteId, NoteEntity note);
+    String createCloudNote(String userId, String noteId, NoteEntity note);
     Query queryCloudNotes(String userId);
     Query searchCloudNotes(String userId, String query);
     Query queryCloudNote(String userId, String noteId);
     Query queryCloudInvitation(String invitationId);
-    void createCloudInvitation(InvitationEntity invitation);
+    InvitationEntity createCloudInvitation(InvitationEntity invitation);
 }
