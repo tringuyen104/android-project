@@ -61,6 +61,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     private static final int REQUEST_CODE = 101;
     private String sSource = "", date = "";
     Toolbar toolbarTop;
+    Date d1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +113,9 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         NoteEntity entity = new NoteEntity();
                         entity.setTitle(eventName.getText().toString());
                         date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy/ HH:mm");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy/ HH:mm");
                         try {
+                            d1 = simpleDateFormat.parse(date);
                             entity.setDate(simpleDateFormat.parse(date));
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -121,7 +123,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
                         dataRepository.insert(entity, true);
-                        Log.d("TAG", "onCreate: " + entity.getTitle());
+                        Log.d("TAG", "onCreate: " + d1 + ", " + date);
                     });
                     getCurrentLocation();
                     DisplayTrack(sSource, sDes);

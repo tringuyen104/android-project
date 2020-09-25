@@ -114,7 +114,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                         entity.setId(bundle.getInt("id"));
                         entity.setTitle(eventName.getText().toString());
                         date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy/ HH:mm");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy/ HH:mm");
                         try {
                             entity.setDate(simpleDateFormat.parse(txtTime.getText().toString()));
                         }
