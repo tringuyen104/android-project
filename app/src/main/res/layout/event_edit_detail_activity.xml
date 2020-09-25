@@ -9,7 +9,7 @@
     tools:context=".EventDetailsActivity">
 
     <Toolbar
-        android:id="@+id/Toolbar_top"
+        android:id="@+id/Toolbar_edit_top"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -19,18 +19,18 @@
 
 
         <TextView
-            android:id="@+id/toolbar_title"
+            android:id="@+id/toolbar_edit_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Thêm sự kiện nhóm"
+            android:text="Chỉnh sửa sự kiện nhóm"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold" />
 
 
         <Button
-            android:id="@+id/bt_track_path"
+            android:id="@+id/bt_edit_track_path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right
@@ -42,7 +42,7 @@
 
         </Button>
 
-        </Toolbar>
+    </Toolbar>
 
 
     <LinearLayout
@@ -52,7 +52,7 @@
         android:layout_marginBottom="-115px"
         android:padding="12dp">
         <TextView
-            android:id="@+id/event1_label"
+            android:id="@+id/event1_edit_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -68,7 +68,7 @@
 
 
     <EditText
-        android:id="@+id/event_name"
+        android:id="@+id/event_edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Event's name"
@@ -87,12 +87,12 @@
         android:layout_marginBottom="-115px"
         android:padding="12dp">
         <TextView
-            android:id="@+id/time_label"
+            android:id="@+id/time_edit_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Thời gian"
-            android:labelFor="@id/event_name"
+            android:labelFor="@id/event_edit_name"
             android:layout_marginTop="16dp"
             android:textColor="@color/colorPrimary"
             >
@@ -102,7 +102,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/time"
+        android:id="@+id/time_edit"
         android:hint="Time"
         android:padding="12dp"
         android:layout_marginTop="16dp"
@@ -118,12 +118,12 @@
         android:layout_marginBottom="-115px"
         android:padding="12dp">
         <TextView
-            android:id="@+id/destination_label"
+            android:id="@+id/destination_edit_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Địa điểm"
-            android:labelFor="@id/event_name"
+            android:labelFor="@id/event_edit_name"
             android:layout_marginTop="16dp"
             android:textColor="@color/colorPrimary"
             >
@@ -133,7 +133,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etDestination"
+        android:id="@+id/etDestination_edit"
         android:hint="Enter destination location"
         android:padding="12dp"
         android:layout_marginTop="16dp"
@@ -148,12 +148,12 @@
         android:layout_marginBottom="-115px"
         android:padding="12dp">
         <TextView
-            android:id="@+id/content_label"
+            android:id="@+id/content_edit_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Nội dung"
-            android:labelFor="@id/event_name"
+            android:labelFor="@id/event_edit_name"
             android:layout_marginTop="16dp"
             android:textColor="@color/colorPrimary"
             >
@@ -163,7 +163,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/content"
+        android:id="@+id/content_edit"
         android:hint="Content"
         android:padding="12dp"
         android:layout_marginTop="16dp"
@@ -172,12 +172,12 @@
         android:textCursorDrawable="@color/colorPrimary">
     </EditText>
 
-<!--    <Button-->
-<!--        android:id="@+id/bt_track_path"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:text="Track Path">-->
+    <!--    <Button-->
+    <!--        android:id="@+id/bt_track_path"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="32dp"-->
+    <!--        android:text="Track Path">-->
 
-<!--    </Button>-->
+    <!--    </Button>-->
 </LinearLayout>

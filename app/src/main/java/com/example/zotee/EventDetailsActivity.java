@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
@@ -59,11 +60,19 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     private Location currentLocation;
     private static final int REQUEST_CODE = 101;
     private String sSource = "", date = "";
+    Toolbar toolbarTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_details_activity);
+
+        toolbarTop = (Toolbar) findViewById(R.id.Toolbar_top);
+//        toolbarTop.setTitle("Thêm sự kiện nhóm");
+        //toolbarTop.inflateMenu(R.menu.event_details_toolbar_items);
+
+
+
 
         btnSetPath = (Button) findViewById(R.id.bt_track_path);
         eventName = (EditText) findViewById(R.id.event_name);
