@@ -43,6 +43,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EventDetailsActivity"></activity>
+        <activity android:name=".EditDetailsActivity"></activity>
         <activity
             android:name=".MapFragmentActivity"
             android:label="@string/title_activity_home" />
