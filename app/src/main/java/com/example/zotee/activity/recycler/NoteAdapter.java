@@ -1,5 +1,6 @@
 package com.example.zotee.activity.recycler;
 
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         holder.itemView.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Selected:" + items.get(position).getId(), Toast.LENGTH_LONG).show();
+
         });
         holder.getBinding().itemActionIcon.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Share selected", Toast.LENGTH_LONG).show();
