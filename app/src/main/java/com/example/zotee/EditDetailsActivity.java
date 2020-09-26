@@ -157,9 +157,9 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                         dataRepository.update(entity);
                         Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
                     });
+                    Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                    startActivity(intent);
                 }
-                Intent intent= new Intent(view.getContext(), HomeActivity.class);
-                startActivity(intent);
             }
         });
     }

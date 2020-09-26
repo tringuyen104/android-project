@@ -24,6 +24,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.zotee.activity.HomeActivity;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 
@@ -56,7 +57,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
    // EditText source;
     EditText des;
     EditText Content;
-    int day, month, year, hour, minute;
+    int day, month, year, hour, minute, t = 0;
     int myDay, myMonth, myYear, myHour, myMinute;
     private FusedLocationProviderClient client;
     private Location currentLocation;
@@ -117,40 +118,53 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                 //get value from edit text
                 // sSource = source.getText().toString().trim();
                 String sDes = des.getText().toString().trim();
-
                 //check condition
                 if (sDes.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter both location!", Toast.LENGTH_SHORT).show();
                 } else {
-                    AsyncTask.execute(() -> {
-                        NoteEntity entity = new NoteEntity();
-                        entity.setTitle(eventName.getText().toString());
-                        date = myDay + "/" + (myMonth + 1) + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                        if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
+                    date = myDay + "/" + (myMonth + 1) + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
+                    {
+                        String d = simpleDateFormat.format(new java.util.Date());
+                        date = d;
+                    }
+                    else
+                    {
+                        date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
+                    }
+                    Date Today = new Date();
+                    try {
+                        if(simpleDateFormat.parse(date).after(Today) || simpleDateFormat.parse(date).equals(Today))
                         {
-                            String d = simpleDateFormat.format(new java.util.Date());
-                            date = d;
+                            AsyncTask.execute(() -> {
+                                NoteEntity entity = new NoteEntity();
+                                entity.setTitle(eventName.getText().toString());
+                                try {
+                                    entity.setDate(simpleDateFormat.parse(date));
+                                }
+                                catch (Exception e)
+                                {
+                                    e.getMessage();
+                                }
+                                entity.setLocationName(sDes);
+                                entity.setContent(Content.getText().toString());
+                                dataRepository.insert(entity, true);
+                                Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date + ", " + t);
+                            });
+                            Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                            startActivity(intent);
                         }
                         else
                         {
-                            date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
+                            Toast.makeText(getApplicationContext(), "Bạn hãy nhập lại ngày lớn hơn hoặc bằng ngày hiện tại!", Toast.LENGTH_SHORT).show();
                         }
-                        try {
-                            entity.setDate(simpleDateFormat.parse(date));
-                        }
-                        catch (Exception e)
-                        {
-                            e.getMessage();
-                        }
-                        entity.setLocationName(sDes);
-                        entity.setContent(Content.getText().toString());
-                        dataRepository.insert(entity, true);
-                        Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date);
-                    });
+                    }
+                    catch (Exception e)
+                    {
+                        e.getMessage();
+                    }
                 }
-                Intent intent= new Intent(view.getContext(), HomeActivity.class);
-                startActivity(intent);
             }
         });
     }
@@ -158,7 +172,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         myYear = year;
-        myDay = day;
+        myDay = dayOfMonth;
         myMonth = month;
         Calendar c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR);
