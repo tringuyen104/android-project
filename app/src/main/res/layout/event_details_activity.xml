@@ -172,6 +172,19 @@
         android:textCursorDrawable="@color/colorPrimary">
     </EditText>
 
+    <Button
+        android:id="@+id/btn_check_map_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:text="Xem bản đồ"
+        android:textColor="#F8F5F5"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold">
+
+    </Button>
 <!--    <Button-->
 <!--        android:id="@+id/bt_track_path"-->
 <!--        android:layout_width="wrap_content"-->

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,6 +49,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
     DataRepository dataRepository;
 
     Button btnSetPath;
+    Button btnCheckMap;
     EditText eventName;
     EditText txtTime;
     EditText source;
@@ -76,6 +78,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
 
 
         btnSetPath = (Button) findViewById(R.id.bt_track_path);
+        btnCheckMap = (Button) findViewById(R.id.btn_check_map_event);
         eventName = (EditText) findViewById(R.id.event_name);
         txtTime = (EditText) findViewById(R.id.time);
 //        source = (EditText) findViewById(R.id.etSource);
@@ -97,6 +100,16 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
         //initialize fuse location
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
+
+        btnCheckMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sDes = des.getText().toString().trim();
+
+                getCurrentLocation();
+                DisplayTrack(sSource, sDes);
+            }
+        });
 
         btnSetPath.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +148,9 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         dataRepository.insert(entity, true);
                         Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date);
                     });
-                    getCurrentLocation();
-                    DisplayTrack(sSource, sDes);
                 }
+                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -210,6 +223,15 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
             //start activity
             startActivity(intent);
         }
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ( keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0 ) {
+            Intent intent= new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
