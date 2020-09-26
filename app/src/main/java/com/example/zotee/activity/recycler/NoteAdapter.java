@@ -23,6 +23,7 @@ import com.example.zotee.storage.entity.NoteEntity;
 import com.example.zotee.storage.model.Note;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -95,8 +96,9 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", items.get(position).getId());
                 bundle.putString("event_name", items.get(position).getTitle());
-                bundle.putString("Date", items.get(position).getDateText());
-                bundle.putString("Time", items.get(position).getTimeText());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+                String d = simpleDateFormat.format(items.get(position).getDate());
+                bundle.putString("Date", d);
                 bundle.putString("DesName", items.get(position).getLocationName());
                 bundle.putString("Content", items.get(position).getContent());
                 intent.putExtras(bundle);

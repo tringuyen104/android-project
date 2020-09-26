@@ -30,6 +30,7 @@ import com.example.zotee.activity.fragment.model.NoteListViewModel;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,7 +64,8 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     private FusedLocationProviderClient client;
     private Location currentLocation;
     private static final int REQUEST_CODE = 101;
-    private String sSource = "", date = "";
+    private String sSource = "", date = "",date1 = "";
+    private Date d1 = null, d2 = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,9 +79,18 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
         Content = (EditText) findViewById(R.id.content_edit);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null)
-        { ;
+        {
             eventName.setText(bundle.getString("event_name"));
-            txtTime.setText(bundle.getString("Date") + "     " + bundle.getString("Time"));
+            txtTime.setText(bundle.getString("Date"));
+            date1 = bundle.getString("Date");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+            try {
+                d1 = simpleDateFormat.parse(bundle.getString("Date"));
+            }
+            catch (Exception e)
+            {
+                e.getMessage();
+            }
             des.setText(bundle.getString("DesName"));
             Content.setText(bundle.getString("Content"));
         }
@@ -113,10 +124,17 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                         NoteEntity entity = new NoteEntity();
                         entity.setId(bundle.getInt("id"));
                         entity.setTitle(eventName.getText().toString());
-                        date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy/ HH:mm");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+                        if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
+                        {
+                            date = date1;
+                        }
+                        else
+                        {
+                            date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
+                        }
                         try {
-                            entity.setDate(simpleDateFormat.parse(txtTime.getText().toString()));
+                            entity.setDate(simpleDateFormat.parse(date));
                         }
                         catch (Exception e)
                         {
@@ -125,7 +143,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
                         dataRepository.update(entity);
-                        Log.d("TAG", "On Create: " + entity.getId() + ", " + entity.getDateText() + ", " + entity.getTimeText());
+                        Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
                     });
                     getCurrentLocation();
                     DisplayTrack(sSource, sDes);
@@ -137,7 +155,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         myYear = year;
-        myDay = day;
+        myDay = dayOfMonth;
         myMonth = month;
         Calendar c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR);
