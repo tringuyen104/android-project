@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,8 +53,14 @@ public class DataSource implements DataRepository {
     }
 
     @Override
-    public LiveData<List<NoteEntity>> search(String query) {
-        return noteDao.searchAllNotes(query);
+    public LiveData<List<NoteEntity>> search(String query) {  return noteDao.searchAllNotes(query); }
+
+    @Override
+    public List<NoteEntity> loadNotes() { return noteDao.loadNotes(); }
+
+    @Override
+    public List<NoteEntity> loadNotesWithTime(Date startTime, Date endTime) {
+        return noteDao.loadNotesWithTime(startTime, endTime);
     }
 
     @Override

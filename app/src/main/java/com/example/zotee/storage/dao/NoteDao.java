@@ -10,6 +10,7 @@ import androidx.room.Update;
 
 import com.example.zotee.storage.entity.NoteEntity;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -43,7 +44,12 @@ public interface NoteDao {
             + "WHERE notesFts MATCH :query")
     LiveData<List<NoteEntity>> searchAllNotes(String query);
 
+    // @Query("SELECT * FROM notes WHERE date BETWEEN :startTime AND :endTime")
+    @Query("SELECT * FROM notes") // SELECT * FROM Table WHERE CAST(strftime('%s', date_field)  AS  integer) <=CAST(strftime('%s', '2015-01-01')  AS  integer)
+    List<NoteEntity> loadNotes();
 
+    @Query("SELECT * FROM notes WHERE strftime('%s', date) BETWEEN strftime('%s', :startDate) AND strftime('%s', :endDate)")
+    List<NoteEntity> loadNotesWithTime(Date startDate, Date endDate);
 
     @Delete
     int delete(NoteEntity product);
