@@ -60,7 +60,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     // EditText source;
     EditText des;
     EditText Content;
-    int day, month, year, hour, minute;
+    int day, month, year, hour, minute, t;
     int myDay, myMonth, myYear, myHour, myMinute;
     private FusedLocationProviderClient client;
     private Location currentLocation;
@@ -132,34 +132,66 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                 if (sDes.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter both location!", Toast.LENGTH_SHORT).show();
                 } else {
-                    AsyncTask.execute(() -> {
-                        NoteEntity entity = new NoteEntity();
-                        entity.setId(bundle.getInt("id"));
-                        entity.setTitle(eventName.getText().toString());
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
-                        if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
-                        {
-                            date = date1;
-                        }
-                        else
-                        {
-                            date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
-                        }
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+                    if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
+                    {
+                        date = date1;
+                        AsyncTask.execute(() -> {
+                            NoteEntity entity = new NoteEntity();
+                            entity.setId(bundle.getInt("id"));
+                            entity.setTitle(eventName.getText().toString());
+                            try {
+                                entity.setDate(simpleDateFormat.parse(date));
+                            }
+                            catch (Exception e)
+                            {
+                                e.getMessage();
+                            }
+                            entity.setLocationName(sDes);
+                            entity.setContent(Content.getText().toString());
+                            dataRepository.update(entity);
+                            Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
+                        });
+                        Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
+                        Date today = new Date();
                         try {
-                            entity.setDate(simpleDateFormat.parse(date));
+                            if(simpleDateFormat.parse(date).after(today) || simpleDateFormat.parse(date).equals(today))
+                            {
+                                AsyncTask.execute(() -> {
+                                    NoteEntity entity = new NoteEntity();
+                                    entity.setId(bundle.getInt("id"));
+                                    entity.setTitle(eventName.getText().toString());
+                                    try {
+                                        entity.setDate(simpleDateFormat.parse(date));
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.getMessage();
+                                    }
+                                    entity.setLocationName(sDes);
+                                    entity.setContent(Content.getText().toString());
+                                    dataRepository.update(entity);
+                                    Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
+                                });
+                                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(), "Bạn hãy nhập lại ngày lớn hơn hoặc bằng ngày hiện tại!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         catch (Exception e)
                         {
                             e.getMessage();
                         }
-                        entity.setLocationName(sDes);
-                        entity.setContent(Content.getText().toString());
-                        dataRepository.update(entity);
-                        Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
-                    });
+                    }
                 }
-                Intent intent= new Intent(view.getContext(), HomeActivity.class);
-                startActivity(intent);
             }
         });
     }
