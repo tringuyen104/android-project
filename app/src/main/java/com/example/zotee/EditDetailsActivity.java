@@ -116,33 +116,9 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
             public void onClick(View view) {
                 String sDes = des.getText().toString().trim();
 
-                //check condition
-                if (sDes.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Vui lòng nhập vào vị trí!", Toast.LENGTH_SHORT).show();
-                } else {
-                    AsyncTask.execute(() -> {
-                        NoteEntity entity = new NoteEntity();
-                        entity.setId(bundle.getInt("id"));
-                        entity.setTitle(eventName.getText().toString());
-                        date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy/ HH:mm");
-                        try {
-                            entity.setDate(simpleDateFormat.parse(txtTime.getText().toString()));
-                        }
-                        catch (Exception e)
-                        {
-                            e.getMessage();
-                        }
-                        entity.setLocationName(sDes);
-                        entity.setContent(Content.getText().toString());
-                        dataRepository.update(entity);
-                        Log.d("TAG", "On Create: " + entity.getId() + ", " + entity.getDateText() + ", " + entity.getTimeText());
-                    });
-                    getCurrentLocation();
-                    DisplayTrack(sSource, sDes);
+                getCurrentLocation();
+                DisplayTrack(sSource, sDes);
                 }
-
-            }
         });
 
         btnSetPath.setOnClickListener(new View.OnClickListener() {
@@ -181,9 +157,9 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                         dataRepository.update(entity);
                         Log.d("TAG", "On Create: " + entity.getDateText() + ", " + entity.getTimeText() + ", " + date + ", " + entity.getDate());
                     });
-                    getCurrentLocation();
-                    DisplayTrack(sSource, sDes);
                 }
+                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                startActivity(intent);
             }
         });
     }
