@@ -128,9 +128,6 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
             } else {
                 Toast.makeText(view.getContext(), "Please sign-in to use this feature", Toast.LENGTH_LONG).show();
             }
-
-
-
         });
         holder.getBinding().setItem(items.get(position));
         holder.getBinding().executePendingBindings();

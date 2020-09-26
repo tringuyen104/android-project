@@ -114,10 +114,21 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                         entity.setTitle(eventName.getText().toString());
                         date = myDay + "/" + (myMonth + 1) + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        if(myDay == 0 && myMonth == 0 && myYear == 0 && myHour == 0 && myMinute == 0)
+                        {
+                            String d = simpleDateFormat.format(new java.util.Date());
+                            date = d;
+                        }
+                        else
+                        {
+                            date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
+                        }
                         try {
                             entity.setDate(simpleDateFormat.parse(date));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        }
+                        catch (Exception e)
+                        {
+                            e.getMessage();
                         }
                         entity.setLocationName(sDes);
                         entity.setContent(Content.getText().toString());
