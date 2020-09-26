@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Chỉnh sửa sự kiện nhóm"
+            android:text="Chỉnh sửa sự kiện"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -172,12 +172,17 @@
         android:textCursorDrawable="@color/colorPrimary">
     </EditText>
 
-    <!--    <Button-->
-    <!--        android:id="@+id/bt_track_path"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="32dp"-->
-    <!--        android:text="Track Path">-->
+    <Button
+        android:id="@+id/btn_check_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:text="Xem bản đồ"
+        android:textColor="#F8F5F5"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold">
 
-    <!--    </Button>-->
+    </Button>
 </LinearLayout>

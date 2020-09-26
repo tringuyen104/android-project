@@ -96,7 +96,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                     participants.add("thinhnguyen6892@gmail.com");
                     entity.setParticipants(participants);
                     dataRepository.createCloudInvitation(entity);*/
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+position, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on " + position, Toast.LENGTH_LONG).show();
                 });
 
                 // Bind to ViewHolder

@@ -52,6 +52,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     DataRepository dataRepository;
 
     Button btnSetPath;
+    Button btnCheckMap;
     EditText eventName;
     EditText txtTime;
     EditText source;
@@ -71,6 +72,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
         setContentView(R.layout.event_edit_detail_activity);
 
         btnSetPath = (Button) findViewById(R.id.bt_edit_track_path);
+        btnCheckMap = (Button) findViewById(R.id.btn_check_map);
         eventName = (EditText) findViewById(R.id.event_edit_name);
         txtTime = (EditText) findViewById(R.id.time_edit);
         des = (EditText) findViewById(R.id.etDestination_edit);
@@ -97,6 +99,40 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
 
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
+
+        btnCheckMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sDes = des.getText().toString().trim();
+
+                //check condition
+                if (sDes.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập vào vị trí!", Toast.LENGTH_SHORT).show();
+                } else {
+                    AsyncTask.execute(() -> {
+                        NoteEntity entity = new NoteEntity();
+                        entity.setId(bundle.getInt("id"));
+                        entity.setTitle(eventName.getText().toString());
+                        date = myDay + "/" + myMonth + "/" + myYear + "/" + " " + myHour + ":" + myMinute;
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy/ HH:mm");
+                        try {
+                            entity.setDate(simpleDateFormat.parse(txtTime.getText().toString()));
+                        }
+                        catch (Exception e)
+                        {
+                            e.getMessage();
+                        }
+                        entity.setLocationName(sDes);
+                        entity.setContent(Content.getText().toString());
+                        dataRepository.update(entity);
+                        Log.d("TAG", "On Create: " + entity.getId() + ", " + entity.getDateText() + ", " + entity.getTimeText());
+                    });
+                    getCurrentLocation();
+                    DisplayTrack(sSource, sDes);
+                }
+
+            }
+        });
 
         btnSetPath.setOnClickListener(new View.OnClickListener() {
             @Override

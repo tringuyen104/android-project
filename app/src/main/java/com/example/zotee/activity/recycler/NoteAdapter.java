@@ -89,7 +89,7 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         holder.itemView.setOnClickListener(view -> {
-            Toast.makeText(view.getContext(), "Selected:" + items.get(position).getId(), Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "Đang xem: " + items.get(position).getTitle(), Toast.LENGTH_LONG).show();
             AsyncTask.execute(() -> {
                 Intent intent = new Intent(view.getContext(), EditDetailsActivity.class);
                 Bundle bundle = new Bundle();

@@ -8,7 +8,7 @@
         android:checked="true"
         android:icon="@drawable/ic_baseline_search_24"
         android:orderInCategory="101"
-        android:title="Search"
+        android:title="Tìm kiếm"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
@@ -27,12 +27,12 @@
             <item
                 android:id="@+id/sign_in_action_bar"
                 android:orderInCategory="103"
-                android:title="Sign In"
+                android:title="Đăng nhập"
                 />
             <item
                 android:id="@+id/sign_out_action_bar"
                 android:orderInCategory="104"
-                android:title="Logout"/>
+                android:title="Đăng xuất"/>
         </menu>
     </item>
 
