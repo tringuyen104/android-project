@@ -70,7 +70,6 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
     private void initAdapter(final String filter) {
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<NoteEntity>()
                 .setQuery(dataRepository.queryCloudNotes(getUser().getUid()), NoteEntity.class)
-//                .setQuery(dataRepository.queryCloudNotes(getUser().getUid()), NoteEntity.class)
                 .build();
         adapter = new FirebaseRecyclerAdapter<Note, ItemViewHolder>(options) {
             @Override
@@ -97,7 +96,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                     participants.add("thinhnguyen6892@gmail.com");
                     entity.setParticipants(participants);
                     dataRepository.createCloudInvitation(entity);*/
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+position, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on " + position, Toast.LENGTH_LONG).show();
                 });
 
                 // Bind to ViewHolder
@@ -153,7 +152,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
         return new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!Strings.isEmptyOrWhitespace(query)) {
+                if (isLogged() && !Strings.isEmptyOrWhitespace(query)) {
                     initAdapter(query);
                 }
                 return true;
@@ -161,7 +160,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length() == 0) {
+                if (isLogged() && newText.length() == 0) {
                     initAdapter();
                 }
                 return false;
