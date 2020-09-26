@@ -128,42 +128,60 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
                     {
                         String d = simpleDateFormat.format(new java.util.Date());
                         date = d;
+                        AsyncTask.execute(() -> {
+                            NoteEntity entity = new NoteEntity();
+                            entity.setTitle(eventName.getText().toString());
+                            try {
+                                entity.setDate(simpleDateFormat.parse(date));
+                            }
+                            catch (Exception e)
+                            {
+                                e.getMessage();
+                            }
+                            entity.setLocationName(sDes);
+                            entity.setContent(Content.getText().toString());
+                            dataRepository.insert(entity, true);
+                            Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date + ", " + t);
+                        });
+                        Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                        startActivity(intent);
                     }
                     else
                     {
                         date = myDay + "/" + (myMonth + 1) + "/" + myYear + "    " + myHour + ":" + myMinute;
-                    }
-                    Date Today = new Date();
-                    try {
-                        if(simpleDateFormat.parse(date).after(Today) || simpleDateFormat.parse(date).equals(Today))
-                        {
-                            AsyncTask.execute(() -> {
-                                NoteEntity entity = new NoteEntity();
-                                entity.setTitle(eventName.getText().toString());
-                                try {
-                                    entity.setDate(simpleDateFormat.parse(date));
-                                }
-                                catch (Exception e)
-                                {
-                                    e.getMessage();
-                                }
-                                entity.setLocationName(sDes);
-                                entity.setContent(Content.getText().toString());
-                                dataRepository.insert(entity, true);
-                                Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date + ", " + t);
-                            });
-                            Intent intent= new Intent(view.getContext(), HomeActivity.class);
-                            startActivity(intent);
+                        Date Today = new Date();
+                        try {
+                            if(simpleDateFormat.parse(date).after(Today) || simpleDateFormat.parse(date).equals(Today))
+                            {
+                                AsyncTask.execute(() -> {
+                                    NoteEntity entity = new NoteEntity();
+                                    entity.setTitle(eventName.getText().toString());
+                                    try {
+                                        entity.setDate(simpleDateFormat.parse(date));
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.getMessage();
+                                    }
+                                    entity.setLocationName(sDes);
+                                    entity.setContent(Content.getText().toString());
+                                    dataRepository.insert(entity, true);
+                                    Log.d("TAG", "onCreate: " + entity.getDate() + ", " + date + ", " + t);
+                                });
+                                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(), "Bạn hãy nhập lại ngày lớn hơn hoặc bằng ngày hiện tại!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            Toast.makeText(getApplicationContext(), "Bạn hãy nhập lại ngày lớn hơn hoặc bằng ngày hiện tại!", Toast.LENGTH_SHORT).show();
+                            e.getMessage();
                         }
                     }
-                    catch (Exception e)
-                    {
-                        e.getMessage();
-                    }
+
                 }
             }
         });
