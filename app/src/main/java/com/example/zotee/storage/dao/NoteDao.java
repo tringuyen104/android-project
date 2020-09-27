@@ -22,7 +22,7 @@ import java.util.List;
 @Dao
 public interface NoteDao {
 
-    @Query("SELECT * FROM notes")
+    @Query("SELECT * FROM notes ORDER BY id desc")
     LiveData<List<NoteEntity>> loadAllNotes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

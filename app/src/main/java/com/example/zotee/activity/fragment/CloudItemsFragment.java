@@ -86,17 +86,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                 // Set click listener for the whole note view
                 final String noteKey = noteRef.getKey();
                 viewHolder.itemView.setOnClickListener(v -> {
-                    //@TODO
-                    // on item click
-/*                    InvitationEntity entity = new InvitationEntity();
-                    entity.setNoteId(noteKey);
-                    entity.setOwnerId(getUser().getUid());
-                    List<String> participants = new ArrayList<>();
-                    participants.add("aktv4pro@gmail.com");
-                    participants.add("thinhnguyen6892@gmail.com");
-                    entity.setParticipants(participants);
-                    dataRepository.createCloudInvitation(entity);*/
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on " + position, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+position, Toast.LENGTH_LONG).show();
                 });
 
                 // Bind to ViewHolder
