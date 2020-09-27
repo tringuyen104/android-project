@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.zotee.CloudEventDetailsActivity;
 import com.example.zotee.EditDetailsActivity;
 import com.example.zotee.R;
+import com.example.zotee.activity.message.MessageGenerator;
 import com.example.zotee.activity.recycler.ItemViewHolder;
 import com.example.zotee.databinding.CloudItemsFragmentBinding;
 import com.example.zotee.databinding.ItemLineBinding;
@@ -111,7 +112,31 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                 viewHolder.getBinding().setItem(model);
                 viewHolder.getBinding().itemActionIcon.setImageResource(R.drawable.ic_baseline_person_add_24);
                 viewHolder.getBinding().itemActionIcon.setOnClickListener(view -> {
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Invite selected", Toast.LENGTH_LONG).show();
+                    if(model.getInvitationId() == null) {
+                        Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Invitation không tồn tại.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    dataRepository.queryCloudInvitation(model.getInvitationId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            InvitationEntity entity = snapshot.getValue(InvitationEntity.class);
+                            if(entity == null) {
+                                Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Không tìm thấy invitation trên hệ thống.", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(entity));
+                            sendIntent.setType("text/plain");
+                            Intent shareIntent = Intent.createChooser(sendIntent, null);
+                            view.getContext().startActivity(shareIntent);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 });
                 if(!Strings.isEmptyOrWhitespace(filter) && !Strings.isEmptyOrWhitespace(model.getFts()) && !model.getFts().toLowerCase().contains(filter.toLowerCase())) {
                     viewHolder.itemView.setVisibility(LinearLayout.GONE);

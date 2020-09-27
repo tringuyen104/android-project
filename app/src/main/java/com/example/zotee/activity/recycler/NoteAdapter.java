@@ -132,6 +132,7 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
                                         invitationEntity = dataRepository.createCloudInvitation(invitationEntity);
                                         note.setInvitationId(invitationEntity.getId());
                                         new Thread(() -> dataRepository.update(note)).start();
+                                        new Thread(() -> dataRepository.createCloudNote(auth.getCurrentUser().getUid(), noteCloudId, note, count)).start();
                                         openShareDialog(view, invitationEntity);
                                     }
 

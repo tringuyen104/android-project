@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.zotee.R;
+import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,9 +64,19 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
 
     protected void toMainActivity() {
         if(auth.getCurrentUser()!= null) {
-            dataRepository.queryCloudInvitation(inviteCode.getText().toString()).addValueEventListener(new ValueEventListener() {
+            String code = inviteCode.getText().toString();
+            if(code == null) {
+                Toast.makeText(InviteLinkActivity.this, "Mã của bạn không tồn tại!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            dataRepository.queryCloudInvitation(code).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    InvitationEntity entity = snapshot.getValue(InvitationEntity.class);
+                    if(entity == null) {
+                        Toast.makeText(InviteLinkActivity.this, "Mã của bạn không tồn tại!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     String userId = auth.getCurrentUser().getUid();
                     if(snapshot.child("ownerId").getValue() != null) {
                         String ownerId = snapshot.child("ownerId").getValue().toString();
@@ -75,7 +86,7 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
 
                         List<String> participants = snapshot.child("participants").getValue(t);
                         if(userId.equalsIgnoreCase(ownerId)) {
-                            Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
+                            Toast.makeText(InviteLinkActivity.this, "Mã của bạn không tồn tại!", Toast.LENGTH_LONG).show();
                         } else {
                             dataRepository.queryCloudNote(ownerId, noteId).addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -86,6 +97,7 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             if(update > 0) {
+                                                noteEntity.setInvitationId(code);
                                                 Integer count = snapshot.getValue(Integer.class);
                                                 dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity, count);
                                                 update--;
@@ -109,14 +121,14 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                             });
                         }
                     } else {
-                        Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(InviteLinkActivity.this, "Mã của bạn không tồn tại!", Toast.LENGTH_LONG).show();
                     }
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(InviteLinkActivity.this, "Invitation not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(InviteLinkActivity.this, "Mã của bạn không tồn tại!", Toast.LENGTH_LONG).show();
                 }
             });
 
