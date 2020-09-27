@@ -81,10 +81,26 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
-                                    dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity);
-                                    Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
-                                    intent.putExtra("showGlobal", true);
-                                    startActivity(intent);
+                                    dataRepository.queryNoteCount().addListenerForSingleValueEvent(new ValueEventListener() {
+                                        int update = 1;
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(update > 0) {
+                                                Integer count = snapshot.getValue(Integer.class);
+                                                dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity, count);
+                                                update--;
+                                                Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
+                                                intent.putExtra("showGlobal", true);
+                                                startActivity(intent);
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
 
                                 @Override

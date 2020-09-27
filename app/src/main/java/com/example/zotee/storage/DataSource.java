@@ -68,11 +68,17 @@ public class DataSource implements DataRepository {
         return null;
     }
 
+    public Query queryNoteCount(){
+        return databaseReference.child("note_count");
+    }
+
     @Override
-    public String createCloudNote(String userId, String noteId, NoteEntity note){
+    public String createCloudNote(String userId, String noteId, NoteEntity note, Integer count){
         noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
         Map<String, Object> updates = new HashMap<>();
-        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity());
+        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity(count));
+        count--;
+        updates.put("note_count",  count);
         databaseReference.updateChildren(updates);
         return noteId;
     }
@@ -94,7 +100,7 @@ public class DataSource implements DataRepository {
 
     @Override
     public Query queryCloudNotes(String userId) {
-        return databaseReference.child("notes").child(userId);
+        return databaseReference.child("notes").child(userId).orderByChild("order");
     }
 
     @Override

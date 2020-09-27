@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -24,6 +25,10 @@ import com.example.zotee.storage.entity.InvitationEntity;
 import com.example.zotee.storage.entity.NoteEntity;
 import com.example.zotee.storage.model.Note;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -150,22 +155,81 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
         holder.getBinding().itemActionIcon.setOnClickListener(view -> {
             if( auth.getCurrentUser() != null) {
                 NoteEntity note = (NoteEntity) items.get(position);
-                if(note.getInvitationId() != null) {
-                    Toast.makeText(view.getContext(), "This note already shared, Please check the Group tab", Toast.LENGTH_LONG).show();
+                if(note.getInvitationId() == null) {
+                    dataRepository.queryNoteCount().addListenerForSingleValueEvent(new ValueEventListener() {
+                                int update = 1;
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(update > 0) {
+                                        update--;
+                                        Integer count = snapshot.getValue(Integer.class);
+                                        String noteCloudId = dataRepository.createCloudNote(auth.getCurrentUser().getUid(), null, note, count);
+                                        InvitationEntity invitationEntity = new InvitationEntity();
+                                        invitationEntity.setNoteId(noteCloudId);
+                                        invitationEntity.setOwnerId(auth.getCurrentUser().getUid());
+                                        invitationEntity = dataRepository.createCloudInvitation(invitationEntity);
+                                        note.setInvitationId(invitationEntity.getId());
+                                        new Thread(() -> dataRepository.update(note)).start();
+                                        openShareDialog(view, invitationEntity);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
                 } else {
-                    String noteCloudId = dataRepository.createCloudNote(auth.getCurrentUser().getUid(), null, note);
-                    InvitationEntity invitationEntity = new InvitationEntity();
-                    invitationEntity.setNoteId(noteCloudId);
-                    invitationEntity.setOwnerId(auth.getCurrentUser().getUid());
-                    invitationEntity = dataRepository.createCloudInvitation(invitationEntity);
-                    note.setInvitationId(invitationEntity.getId());
-                    new Thread(() -> dataRepository.update(note)).start();
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(invitationEntity));
-                    sendIntent.setType("text/plain");
-                    Intent shareIntent = Intent.createChooser(sendIntent, null);
-                    view.getContext().startActivity(shareIntent);
+                    Query query = dataRepository.queryCloudInvitation(note.getInvitationId());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            InvitationEntity invitationEntity = snapshot.getValue(InvitationEntity.class);
+                            if(invitationEntity == null) {
+                                note.setInvitationId(null);
+                                new Thread(() -> dataRepository.update(note)).start();
+                                Toast.makeText(view.getContext(), "Lỗi dữ liệu với Server. Vui lòng thử lại!", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            dataRepository.queryCloudNote(auth.getCurrentUser().getUid(), invitationEntity.getNoteId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
+                                    if(noteEntity != null) {
+                                        openShareDialog(view, invitationEntity);
+                                    } else {
+                                        dataRepository.queryNoteCount().addValueEventListener(new ValueEventListener() {
+                                            int update = 1;
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if(update > 0) {
+                                                    Integer count = snapshot.getValue(Integer.class);
+                                                    dataRepository.createCloudNote(auth.getCurrentUser().getUid(), null, note, count);
+                                                    update--;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
                 }
             } else {
                 Toast.makeText(view.getContext(), "Please sign-in to use this feature", Toast.LENGTH_LONG).show();
@@ -173,6 +237,15 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
         });
         holder.getBinding().setItem(items.get(position));
         holder.getBinding().executePendingBindings();
+    }
+
+    protected void openShareDialog(View view, InvitationEntity invitationEntity){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(invitationEntity));
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        view.getContext().startActivity(shareIntent);
     }
 
 

@@ -104,7 +104,7 @@ public class NoteEntity implements Note {
     }
 
     @Exclude
-    public Map<String, Object> toCloudEntity() {
+    public Map<String, Object> toCloudEntity(int order) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("title", title);
         result.put("fts", String.format("%s %s %s", title, content, locationName));
@@ -113,6 +113,7 @@ public class NoteEntity implements Note {
         result.put("lat", lat);
         result.put("lng", lng);
         result.put("date", date);
+        result.put("order", order);
         result.put("invitationId", invitationId);
         return result;
     }
