@@ -108,44 +108,6 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
             });
         });
 
-        holder.getBinding().itemDeleteIcon.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("Xác nhận xóa");
-            builder.setMessage("Bạn có muốn xóa lịch hẹn " + items.get(position).getTitle() + " này?");
-            builder.setIcon(R.drawable.ic_baseline_remove_circle_24);
-            builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-
-                    AsyncTask.execute(() -> {
-                        NoteEntity entity = new NoteEntity();
-                        entity.setId(items.get(position).getId());
-                        entity.setTitle(items.get(position).getTitle());
-
-                        try {
-                            entity.setDate(items.get(position).getDate());
-                        }
-                        catch (Exception e)
-                        {
-                            e.getMessage();
-                        }
-                        entity.setLocationName(items.get(position).getLocationName());
-                        entity.setContent(items.get(position).getContent());
-                        dataRepository.delete(entity);
-                    });
-                    Intent intent= new Intent(view.getContext(), HomeActivity.class);
-                    view.getContext().startActivity(intent);
-                }
-
-            });
-            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
-        });
 
         holder.getBinding().itemActionIcon.setOnClickListener(view -> {
             if( auth.getCurrentUser() != null) {

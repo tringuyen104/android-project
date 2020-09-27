@@ -1,5 +1,6 @@
 package com.example.zotee;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
@@ -9,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -54,6 +56,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
 
     Button btnSetPath;
     Button btnCheckMap;
+    Button btnDeleteNode;
     EditText eventName;
     EditText txtTime;
     EditText source;
@@ -75,6 +78,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
 
         btnSetPath = (Button) findViewById(R.id.bt_edit_track_path);
         btnCheckMap = (Button) findViewById(R.id.btn_check_map);
+        btnDeleteNode = (Button) findViewById(R.id.btn_delete_note);
         eventName = (EditText) findViewById(R.id.event_edit_name);
         txtTime = (EditText) findViewById(R.id.time_edit);
         des = (EditText) findViewById(R.id.etDestination_edit);
@@ -119,6 +123,39 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
                 getCurrentLocation();
                 DisplayTrack(sSource, sDes);
                 }
+        });
+
+        btnDeleteNode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Xác nhận xóa");
+                builder.setMessage("Bạn có muốn xóa lịch hẹn " + bundle.getString("event_name") + " này?");
+                builder.setIcon(R.drawable.ic_baseline_remove_circle_24);
+                builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+
+                    AsyncTask.execute(() -> {
+                        NoteEntity entity = new NoteEntity();
+                        entity.setId(bundle.getInt("id"));
+
+                        dataRepository.delete(entity);
+                    });
+                    Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                    view.getContext().startActivity(intent);
+                    }
+
+                });
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
         });
 
         btnSetPath.setOnClickListener(new View.OnClickListener() {
