@@ -16,31 +16,30 @@
         android:background="@color/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar">
-
-
-        <TextView
-            android:id="@+id/toolbar_edit_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Xem sự kiện của nhóm"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-
         <Button
             android:id="@+id/bt_edit_track_path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right
-"
+            android:layout_gravity="left"
             android:background="@android:color/transparent"
             android:text="Quay về"
             android:textSize="18sp"
             android:textStyle="bold">
 
         </Button>
+
+        <TextView
+            android:id="@+id/toolbar_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Xem sự kiện"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+
 
 
 
