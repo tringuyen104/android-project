@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.VibrationEffect;
@@ -20,13 +21,17 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.zotee.EditDetailsActivity;
+import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.R;
+import com.example.zotee.activity.HomeActivity;
 import com.example.zotee.activity.VibratorNotification;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 
 import java.sql.Array;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 // import java.sql.Date;
 import java.util.ArrayList;
@@ -47,7 +52,6 @@ public class NotificationService extends Service {
     DataRepository dataRepository;
 
     private static final String CHANNEL_ID = "NOTIFICATION_CHANNEL";
-    private static final String GROUP_KEY_WORK_EVENT = "com.android.example.WORK_EVENT";
     private static final int NOTIFICATION_ID = 1000;
     private int counter=0;
     private List<NotificationModel> _lstNoteDisplay = new ArrayList<>();
@@ -65,17 +69,33 @@ public class NotificationService extends Service {
         // createNotificationChannel(CHANNEL_ID); o dau
     }
 
-    private void pushNotification(String address, String time, Integer id)
+    private void pushNotification(NoteEntity noteEntity, String time, Integer id)
     {
         String channelId = CHANNEL_ID;
         createNotificationChannel(channelId);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         StringBuilder message = new StringBuilder();
-        message.append("Bạn còn ").append(time).append(" phút để đến cuộc hẹn tại ").append(address);
+        message.append("Bạn còn ").append(time).append(" phút để đến cuộc hẹn tại ").append(noteEntity.getLocationName());
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId);
 
+        Intent notifyIntent = new Intent(this, EditDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", noteEntity.getId());
+        bundle.putString("event_name", noteEntity.getTitle());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+        String d = simpleDateFormat.format(noteEntity.getDate());
+        bundle.putString("Date", d);
+        bundle.putString("DesName", noteEntity.getLocationName());
+        bundle.putString("Content", noteEntity.getContent());
+        notifyIntent.putExtras(bundle);
+
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(notifyPendingIntent);
         Notification notification = mBuilder
                 .setSmallIcon(R.drawable.ic_clock)
                 .setContentTitle("Zotee")
@@ -83,6 +103,7 @@ public class NotificationService extends Service {
                 .setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setAutoCancel(true)
+                .setGroup("com.example.zotee.notification.REMIND")
                 .build();
 
         notificationManager.notify(id, notification);
@@ -118,9 +139,6 @@ public class NotificationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stoptimertask();
-
-        /*Intent lintent = new Intent(this, LocationService.class);
-        context.stopService(lintent);*/
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartservice");
         broadcastIntent.setClass(this, NotificationBroadCastReceiver.class);
@@ -142,7 +160,6 @@ public class NotificationService extends Service {
     }
 
     private  void createNotificationWithData() {
-
         Calendar calCurrentTime = Calendar.getInstance();/*
         Calendar calDepreciationTime = Calendar.getInstance();*/
         Calendar calEndTime = Calendar.getInstance();
@@ -190,9 +207,9 @@ public class NotificationService extends Service {
                     v.vibrate(1000);
                 }*/
                 if(NotificationStatus.DISPLAY == status)
-                    pushNotification(item.getLocationName(), String.valueOf(minutes), notificationModel.getNotificationId());
+                    pushNotification(item, String.valueOf(minutes), notificationModel.getNotificationId());
                 else if(NotificationStatus.REMOVE == status){
-                    pushNotification(item.getLocationName(), String.valueOf(minutes), notId);
+                    pushNotification(item, String.valueOf(minutes), notId);
                     removeNotificationItem(notificationModel.getId());
                    /* Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
