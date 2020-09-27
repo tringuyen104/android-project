@@ -56,24 +56,23 @@ public class NotificationService extends Service {
         for(int i=0; i< 20; i++){ if(i%2==0) add(i); }
     }} ;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
-        // createNotificationChannel(CHANNEL_ID);
+        Log.d("notification", "Oncreated called");
+        // createNotificationChannel(CHANNEL_ID); o dau
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private void pushNotification(String address, String time, Integer id)
     {
         String channelId = CHANNEL_ID;
         createNotificationChannel(channelId);
-
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         StringBuilder message = new StringBuilder();
         message.append("Bạn còn ").append(time).append(" phút để đến cuộc hẹn tại ").append(address);
-
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId);
 
@@ -110,6 +109,7 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         startTimer();
+        Log.d("noti", "OnStart called");
         return START_STICKY;
     }
 
@@ -135,15 +135,12 @@ public class NotificationService extends Service {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     createNotificationWithData();
-                }
             }
         };
         timer.schedule(timerTask, 0, 1000*60);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private  void createNotificationWithData() {
 
         Calendar calCurrentTime = Calendar.getInstance();/*
@@ -217,7 +214,6 @@ public class NotificationService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void removeNotificationItem(int id){
         int index = 0;
         for (int i = 0; i <  _lstNoteDisplay.size(); i++){
@@ -230,10 +226,14 @@ public class NotificationService extends Service {
         }
         _lstNoteDisplay.remove(index);
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private NotificationStatus isDisplayNotification(NotificationModel model){
-        boolean check = _lstNoteDisplay.stream().anyMatch(x -> x.getId() == model.getId());
+        boolean check = false;
+        for(NotificationModel notificationModel : _lstNoteDisplay) {
+            if(notificationModel.getId() == model.getId()) {
+                check = true;
+                break;
+            }
+        }
 
         if(!check) {
             _lstNoteDisplay.add(model);
@@ -265,12 +265,6 @@ public class NotificationService extends Service {
         return result;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void cancelNotification(Context ctx, int notifyId) {
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.deleteNotificationChannel(CHANNEL_ID);
-    }
 
     public void stoptimertask() {
         if (timer != null) {
