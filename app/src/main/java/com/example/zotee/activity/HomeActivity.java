@@ -113,10 +113,7 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
                 int position = tab.getPosition();
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(position == 1 ) {
-                    fab.setOnClickListener(onlineFabClick);
-                    if (firebaseUser == null) {
-                        fab.hide();
-                    }
+                    fab.hide();
                 } else {
                     fab.setOnClickListener(localFabClick);
                     fab.show();
