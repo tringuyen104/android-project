@@ -110,35 +110,41 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
 
                 // Bind to ViewHolder
                 viewHolder.getBinding().setItem(model);
-                viewHolder.getBinding().itemActionIcon.setImageResource(R.drawable.ic_baseline_person_add_24);
-                viewHolder.getBinding().itemActionIcon.setOnClickListener(view -> {
-                    if(model.getInvitationId() == null) {
-                        Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Invitation không tồn tại.", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    dataRepository.queryCloudInvitation(model.getInvitationId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            InvitationEntity entity = snapshot.getValue(InvitationEntity.class);
-                            if(entity == null) {
-                                Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Không tìm thấy invitation trên hệ thống.", Toast.LENGTH_LONG).show();
-                                return;
+                if(getAuth().getUid().equalsIgnoreCase(model.getOwner())) {
+                    viewHolder.getBinding().itemActionIcon.setVisibility(LinearLayout.VISIBLE);
+                    viewHolder.getBinding().itemActionIcon.setImageResource(R.drawable.ic_baseline_person_add_24);
+                    viewHolder.getBinding().itemActionIcon.setOnClickListener(view -> {
+                        if(model.getInvitationId() == null) {
+                            Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Invitation không tồn tại.", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        dataRepository.queryCloudInvitation(model.getInvitationId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                InvitationEntity entity = snapshot.getValue(InvitationEntity.class);
+                                if(entity == null) {
+                                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Không tìm thấy invitation trên hệ thống.", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                entity.setId(model.getInvitationId());
+                                Intent sendIntent = new Intent();
+                                sendIntent.setAction(Intent.ACTION_SEND);
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(entity));
+                                sendIntent.setType("text/plain");
+                                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                                view.getContext().startActivity(shareIntent);
                             }
-                            entity.setId(model.getInvitationId());
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(entity));
-                            sendIntent.setType("text/plain");
-                            Intent shareIntent = Intent.createChooser(sendIntent, null);
-                            view.getContext().startActivity(shareIntent);
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
+                            }
+                        });
                     });
-                });
+                } else {
+                    viewHolder.getBinding().itemActionIcon.setVisibility(LinearLayout.GONE);
+                }
+
                 if(!Strings.isEmptyOrWhitespace(filter) && !Strings.isEmptyOrWhitespace(model.getFts()) && !model.getFts().toLowerCase().contains(filter.toLowerCase())) {
                     viewHolder.itemView.setVisibility(LinearLayout.GONE);
                     viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));

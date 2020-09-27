@@ -2,6 +2,7 @@ package com.example.zotee.storage.entity;
 
 import androidx.room.Entity;
 import androidx.room.Fts4;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.zotee.storage.model.Note;
@@ -28,6 +29,7 @@ public class NoteEntity implements Note {
     private String lng;
     private Date date;
     private String invitationId;
+    private String owner;
 
     public String getTitle() {
         return title;
@@ -104,7 +106,7 @@ public class NoteEntity implements Note {
     }
 
     @Exclude
-    public Map<String, Object> toCloudEntity(int order) {
+    public Map<String, Object> toCloudEntity(int order, String owner) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("title", title);
         result.put("fts", String.format("%s %s %s", title, content, locationName));
@@ -115,6 +117,7 @@ public class NoteEntity implements Note {
         result.put("date", date);
         result.put("order", order);
         result.put("invitationId", invitationId);
+        result.put("owner", owner);
         return result;
     }
 
@@ -125,5 +128,12 @@ public class NoteEntity implements Note {
 
     public void setInvitationId(String invitationId) {
         this.invitationId = invitationId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

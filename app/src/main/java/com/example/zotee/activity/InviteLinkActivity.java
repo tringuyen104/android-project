@@ -102,7 +102,7 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
                                             if(update > 0) {
                                                 noteEntity.setInvitationId(code);
                                                 Integer count = snapshot.getValue(Integer.class);
-                                                dataRepository.createCloudNote(auth.getUid(), noteId, noteEntity, count);
+                                                dataRepository.createInviteCloudNote(auth.getUid(), noteId, noteEntity, count);
                                                 update--;
                                                 Intent intent = new Intent(InviteLinkActivity.this, HomeActivity.class);
                                                 intent.putExtra("showGlobal", true);

@@ -31,6 +31,7 @@ public interface DataRepository {
     Query queryNoteCount();
     DatabaseReference getLoggedUserDetail(String userId);
     String createCloudNote(String userId, String noteId, NoteEntity note, Integer count);
+    String createInviteCloudNote(String userId, String noteId, NoteEntity note, Integer count);
     Query queryCloudNotes(String userId);
     Query searchCloudNotes(String userId, String query);
     Query queryCloudNote(String userId, String noteId);

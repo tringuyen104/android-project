@@ -76,7 +76,18 @@ public class DataSource implements DataRepository {
     public String createCloudNote(String userId, String noteId, NoteEntity note, Integer count){
         noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
         Map<String, Object> updates = new HashMap<>();
-        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity(count));
+        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity(count, userId));
+        count--;
+        updates.put("note_count",  count);
+        databaseReference.updateChildren(updates);
+        return noteId;
+    }
+
+    @Override
+    public String createInviteCloudNote(String userId, String noteId, NoteEntity note, Integer count){
+        noteId = noteId != null ? noteId : databaseReference.child("notes").child(userId).push().getKey();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("/notes/"+userId+"/"+noteId, note.toCloudEntity(count, null));
         count--;
         updates.put("note_count",  count);
         databaseReference.updateChildren(updates);
