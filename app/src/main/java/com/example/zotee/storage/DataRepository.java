@@ -8,6 +8,7 @@ import com.example.zotee.storage.model.Invitation;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -22,6 +23,9 @@ public interface DataRepository {
     int update(NoteEntity note);
     int delete(NoteEntity note);
     LiveData<List<NoteEntity>> search(String query);
+    List<NoteEntity> loadNotes();
+    List<NoteEntity> loadNotesWithTime(Date startTime, Date endTime);
+
 
     //Global stuff
     DatabaseReference getLoggedUserDetail(String userId);

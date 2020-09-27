@@ -1,20 +1,27 @@
 package com.example.zotee.activity;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.activity.fragment.CloudItemsFragment;
 import com.example.zotee.activity.fragment.ItemListFragment;
+import com.example.zotee.notification.NotificationBroadCastReceiver;
+import com.example.zotee.notification.NotificationService;
 import com.example.zotee.storage.DataRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,11 +41,14 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
 
     @Inject
     DataRepository dataRepository;
-
+    Intent mServiceIntent;
+    private NotificationService mNotificationService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        instanceService();
         Intent in = getIntent();
         Boolean showSecondTab = in.getBooleanExtra("showGlobal", false);
         //Toolbar
@@ -129,6 +139,30 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
         }
     }
 
+    private void instanceService() {
+        mNotificationService = new NotificationService();
+        mServiceIntent = new Intent(this, mNotificationService.getClass());
+        if (!isMyServiceRunning(mNotificationService.getClass())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(mServiceIntent);
+            } else {
+                startService(mServiceIntent);
+            }
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
+    }
+
     @Override
     void onLoggedIn() {
 
@@ -164,5 +198,14 @@ public class HomeActivity extends FirebaseAuthenticationActivity {
         MenuItem signOutItem =  menu.findItem(R.id.sign_out_action_bar);
         signOutItem.setVisible(logged);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("restartservice");
+        broadcastIntent.setClass(this, NotificationBroadCastReceiver.class);
+        this.sendBroadcast(broadcastIntent);
+        super.onDestroy();
     }
 }
