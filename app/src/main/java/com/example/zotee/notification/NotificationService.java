@@ -3,23 +3,29 @@ package com.example.zotee.notification;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.zotee.R;
+import com.example.zotee.activity.VibratorNotification;
 import com.example.zotee.storage.DataRepository;
 import com.example.zotee.storage.entity.NoteEntity;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.Date;
 // import java.sql.Date;
@@ -28,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -42,43 +49,54 @@ public class NotificationService extends Service {
     private static final String CHANNEL_ID = "NOTIFICATION_CHANNEL";
     private static final String GROUP_KEY_WORK_EVENT = "com.android.example.WORK_EVENT";
     private static final int NOTIFICATION_ID = 1000;
-    public int counter=0;
+    private int counter=0;
+    private List<NotificationModel> _lstNoteDisplay = new ArrayList<>();
+    private List<Integer> _minutes = new ArrayList<Integer>()
+    {{
+        for(int i=0; i< 20; i++){ if(i%2==0) add(i); }
+    }} ;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
+        // createNotificationChannel(CHANNEL_ID);
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private void pushNotification(String address, String time, Integer id)
     {
+        String channelId = CHANNEL_ID;
+        createNotificationChannel(channelId);
+
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         StringBuilder message = new StringBuilder();
-        message.append("You have an appointment at ").append(time).append(" at ").append(address);
+        message.append("Bạn còn ").append(time).append(" phút để đến cuộc hẹn tại ").append(address);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId);
 
         Notification notification = mBuilder
                 .setSmallIcon(R.drawable.ic_clock)
                 .setContentTitle("Zotee")
                 .setContentText(message)
-                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setCategory(Notification.CATEGORY_SERVICE)
-                .setGroup(GROUP_KEY_WORK_EVENT)
                 .setAutoCancel(true)
                 .build();
-        startForeground(id, notification);
+
+        notificationManager.notify(id, notification);
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannel(String channelId) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(com.example.zotee.R.string.app_name);
             String description = "description";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -122,42 +140,111 @@ public class NotificationService extends Service {
                 }
             }
         };
-        timer.schedule(timerTask, 0, 1000 * 5);
+        timer.schedule(timerTask, 0, 1000*60);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private  void createNotificationWithData() {
 
-        createNotificationChannel();
-
-        Calendar calCurrentTime = Calendar.getInstance();
-        Calendar calDepreciationTime = Calendar.getInstance();
+        Calendar calCurrentTime = Calendar.getInstance();/*
+        Calendar calDepreciationTime = Calendar.getInstance();*/
         Calendar calEndTime = Calendar.getInstance();
         calEndTime.add(Calendar.MINUTE, 30);
-        calCurrentTime.add(Calendar.MINUTE, -1);
-        calDepreciationTime.add(Calendar.MINUTE, 1);
+        calCurrentTime.add(Calendar.MINUTE, -1);/*
+        calDepreciationTime.add(Calendar.MINUTE, 1);*/
 
         // Time before 30 minutes
         Date currentTime = new Date(calCurrentTime.getTime().getTime());
         Date endTime = new Date(calEndTime.getTime().getTime());
-        Date depreciationTime = new Date(calDepreciationTime.getTime().getTime());
 
         List<NoteEntity> lstData =  dataRepository.loadNotes();
-        List<NoteEntity> filterData = filterNoteWithTime(currentTime, endTime, lstData);
-        NoteEntity currentData = getNoteCurrentTime(currentTime, depreciationTime, lstData);
+        List<NoteEntity> filterData = null;
+        NoteEntity currentEvent;
+        if(lstData.size() > 0) {
+            Log.i("Start notification", " Notification " + counter++);
+            filterData = filterNoteWithTime(currentTime, endTime, lstData);
 
-        Log.i("Start notification", " Notification " + counter++);
-        for (NoteEntity item : filterData){
-            int id = NOTIFICATION_ID;
-            id++;
-            pushNotification(item.getLocationName(), item.getTimeText(), id);
+            if(filterData.size() == 0) return;
+            for (NoteEntity item : filterData) {
+
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                long subTime = item.getDate().getTime() - currentTime.getTime();
+                Date date = new Date(subTime);
+
+                int minutes = date.getMinutes();
+                int notId = (int) timestamp.getTime();
+                NotificationModel notificationModel = new NotificationModel();
+                notificationModel.setDisplay(true);
+                notificationModel.setId(item.getId());
+                notificationModel.setMinutes(minutes);
+                notificationModel.setNotificationId(notId);
+
+                NotificationStatus status =  isDisplayNotification(notificationModel);
+              /*  sendMessageToActivity(item.getTitle());
+                Intent dialogIntent = new Intent(this, VibratorNotification.class);
+                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplication().startActivity(dialogIntent);*/
+                /*Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    //deprecated in API 26
+                    v.vibrate(1000);
+                }*/
+                if(NotificationStatus.DISPLAY == status)
+                    pushNotification(item.getLocationName(), String.valueOf(minutes), notificationModel.getNotificationId());
+                else if(NotificationStatus.REMOVE == status){
+                    pushNotification(item.getLocationName(), String.valueOf(minutes), notId);
+                    removeNotificationItem(notificationModel.getId());
+                   /* Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //deprecated in API 26
+                        v.vibrate(1000);
+                    }*/
+                }
+            }
+        }
+    }
+
+    private  void sendMessageToActivity(String msg) {
+        Intent intent = new Intent("AppointmentStart");
+        // You can also include some extra data.
+        intent.putExtra("Message", msg);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void removeNotificationItem(int id){
+        int index = 0;
+        for (int i = 0; i <  _lstNoteDisplay.size(); i++){
+            NotificationModel item = _lstNoteDisplay.get(i);
+            if(item.getId() == id)
+            {
+                index = i;
+                break;
+            }
+        }
+        _lstNoteDisplay.remove(index);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private NotificationStatus isDisplayNotification(NotificationModel model){
+        boolean check = _lstNoteDisplay.stream().anyMatch(x -> x.getId() == model.getId());
+
+        if(!check) {
+            _lstNoteDisplay.add(model);
+            return NotificationStatus.DISPLAY;
         }
 
-        /*if(counter % 3 == 0) {
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.deleteNotificationChannel(CHANNEL_ID);
-        }*/
+        if(_minutes.contains(model.getMinutes()))
+            return NotificationStatus.DISPLAY;
+        if (model.getMinutes() == 3 )
+            return NotificationStatus.REMOVE;
+        return NotificationStatus.NONE;
     }
 
     private List<NoteEntity> filterNoteWithTime(Date startTime, Date endTime, List<NoteEntity> lstData){
@@ -176,24 +263,6 @@ public class NotificationService extends Service {
             }
         }
         return result;
-    }
-
-    private NoteEntity getNoteCurrentTime(Date currentTime, Date depreciationTime, List<NoteEntity> lstData){
-       if(lstData.size() == 0) return null;
-
-        Timestamp currentTimestamp = new Timestamp(currentTime.getTime());
-        Timestamp depreciationTimestamp = new Timestamp(depreciationTime.getTime());
-        for (NoteEntity item : lstData) {
-
-            Date date = item.getDate();
-            if(date == null) continue;
-
-            Timestamp timestamp = new Timestamp(date.getTime());
-            if(timestamp.getTime() > currentTimestamp.getTime() && timestamp.getTime() <= depreciationTimestamp.getTime()){
-               return item;
-            }
-        }
-        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
