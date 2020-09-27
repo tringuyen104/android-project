@@ -70,6 +70,7 @@
         </activity>
         <activity android:name=".EventDetailsActivity" />
         <activity android:name=".EditDetailsActivity" />
+        <activity android:name=".CloudEventDetailsActivity"/>
         <activity
             android:name=".MapFragmentActivity"
             android:label="@string/title_activity_home" />

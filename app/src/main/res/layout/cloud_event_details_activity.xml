@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CloudEventDetailsActivity">
+
+    <Toolbar
+        android:id="@+id/Toolbar_edit_top"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar">
+
+
+        <TextView
+            android:id="@+id/toolbar_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Xem sự kiện của nhóm"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/bt_edit_track_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right
+"
+            android:background="@android:color/transparent"
+            android:text="Quay về"
+            android:textSize="18sp"
+            android:textStyle="bold">
+
+        </Button>
+
+
+
+    </Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="-115px"
+        android:padding="12dp">
+        <TextView
+            android:id="@+id/event1_edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tên sự kiện"
+            android:labelFor="@id/event_name"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/colorPrimary"
+            >
+        </TextView>
+
+    </LinearLayout>
+
+
+
+    <EditText
+        android:id="@+id/event_edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="VD: Họp mặt"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryText"
+        android:textCursorDrawable="@color/colorPrimary"
+        ></EditText>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="-115px"
+        android:padding="12dp">
+        <TextView
+            android:id="@+id/time_edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Thời gian"
+            android:labelFor="@id/event_edit_name"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimary"
+            >
+        </TextView>
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/time_edit"
+        android:hint="VD: 12/12/2020 12h30"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryText"
+        android:textCursorDrawable="@color/colorPrimary">
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="-115px"
+        android:padding="12dp">
+        <TextView
+            android:id="@+id/destination_edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Địa điểm"
+            android:labelFor="@id/event_edit_name"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimary"
+            >
+        </TextView>
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etDestination_edit"
+        android:hint="VD: Đường ABC quận 1 F.12"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryText"
+        android:textCursorDrawable="@color/colorPrimary">
+    </EditText>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="-115px"
+        android:padding="12dp">
+        <TextView
+            android:id="@+id/content_edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Nội dung"
+            android:labelFor="@id/event_edit_name"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimary"
+            >
+        </TextView>
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content_edit"
+        android:hint="VD: Nhân dịp lễ ABC kính mời..."
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryText"
+        android:textCursorDrawable="@color/colorPrimary">
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-115px"
+        android:padding="30dp"
+        android:layout_gravity="center"
+        >
+
+        <Button
+            android:id="@+id/btn_check_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="50px"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorPrimary"
+            android:text="Xem bản đồ"
+            android:textColor="#F8F5F5"
+            android:textSize="14sp"
+            android:textStyle="bold">
+
+        </Button>
+
+
+    </LinearLayout>
+</LinearLayout>

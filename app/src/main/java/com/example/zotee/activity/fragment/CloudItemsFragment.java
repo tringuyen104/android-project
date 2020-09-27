@@ -1,5 +1,7 @@
 package com.example.zotee.activity.fragment;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.zotee.CloudEventDetailsActivity;
+import com.example.zotee.EditDetailsActivity;
 import com.example.zotee.R;
 import com.example.zotee.activity.recycler.ItemViewHolder;
 import com.example.zotee.databinding.CloudItemsFragmentBinding;
@@ -35,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +91,20 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                 // Set click listener for the whole note view
                 final String noteKey = noteRef.getKey();
                 viewHolder.itemView.setOnClickListener(v -> {
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+position, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Select on "+(position + 1), Toast.LENGTH_LONG).show();
+                    AsyncTask.execute(() -> {
+                        Intent intent = new Intent(CloudItemsFragment.this.requireActivity(), CloudEventDetailsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id", model.getId());
+                        bundle.putString("event_name", model.getTitle());
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy    HH:mm");
+                        String d = simpleDateFormat.format(model.getDate());
+                        bundle.putString("Date", d);
+                        bundle.putString("DesName", model.getLocationName());
+                        bundle.putString("Content", model.getContent());
+                        intent.putExtras(bundle);
+                        CloudItemsFragment.this.requireActivity().startActivity(intent);
+                    });
                 });
 
                 // Bind to ViewHolder
