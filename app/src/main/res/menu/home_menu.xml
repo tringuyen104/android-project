@@ -25,13 +25,18 @@
                 android:title="Hello"
                 />
             <item
-                android:id="@+id/sign_in_action_bar"
+                android:id="@+id/invite"
                 android:orderInCategory="103"
+                android:title="Lời mời"
+                />
+            <item
+                android:id="@+id/sign_in_action_bar"
+                android:orderInCategory="104"
                 android:title="Đăng nhập"
                 />
             <item
                 android:id="@+id/sign_out_action_bar"
-                android:orderInCategory="104"
+                android:orderInCategory="105"
                 android:title="Đăng xuất"/>
         </menu>
     </item>

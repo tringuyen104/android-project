@@ -15,6 +15,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import com.example.zotee.R;
+import com.example.zotee.activity.HomeActivity;
+import com.example.zotee.activity.InviteLinkActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -66,6 +68,13 @@ public abstract class SearchableActionBarFragment extends Fragment {
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(getSearchQueryListener());
+
+        MenuItem invite = menu.findItem(R.id.invite);
+        invite.setOnMenuItemClickListener(menuItem -> {
+            Intent intent = new Intent(getContext(), InviteLinkActivity.class);
+            startActivity(intent);
+            return true;
+        });
 
         MenuItem signInItem = menu.findItem(R.id.sign_in_action_bar);
         signInItem.setOnMenuItemClickListener(menuItem -> {

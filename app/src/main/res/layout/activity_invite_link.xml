@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:padding="15dp"
-        android:text="Welcome!"
+        android:text="Xin chào!"
         android:textColor="@color/colorWhite"
         android:textSize="38sp"
         android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Please input your invitation code:"
+            android:text="Hãy nhập mã giới thiệu của bạn tại đây:"
             android:textColor="@color/colorWhite"
             android:textSize="17sp"
             ></TextView>
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/grey_500"
-            android:hint="Input invitation code here..."/>
+            android:hint="Mã lời mời. Ví dụ: -AuIgALdaKT6Ua"/>
 
     </LinearLayout>
     <View
@@ -69,7 +69,7 @@
             android:id="@+id/getInvited"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Get Invited"
+            android:text="Chập nhận lời mời"
             android:textColor="@color/colorWhite"
             android:background="@color/colorPrimary"
             />

@@ -36,7 +36,10 @@ public class InviteLinkActivity extends FirebaseAuthenticationActivity {
 
         Intent in = getIntent();
         Uri data = in.getData();
-        String code = data.getQueryParameter("code");
+        String code = "";
+        if(data != null) {
+            code =data.getQueryParameter("code");
+        };
 
         inviteCode = findViewById(R.id.inviteInput);
         inviteCode.setText(code);
