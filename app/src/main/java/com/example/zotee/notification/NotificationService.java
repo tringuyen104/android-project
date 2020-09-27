@@ -21,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.zotee.CloudEventDetailsActivity;
 import com.example.zotee.EditDetailsActivity;
 import com.example.zotee.EventDetailsActivity;
 import com.example.zotee.R;
@@ -80,7 +81,7 @@ public class NotificationService extends Service {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId);
 
-        Intent notifyIntent = new Intent(this, EditDetailsActivity.class);
+        Intent notifyIntent = new Intent(this, CloudEventDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("id", noteEntity.getId());
         bundle.putString("event_name", noteEntity.getTitle());
