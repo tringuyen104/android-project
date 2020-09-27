@@ -28,6 +28,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".notification.AlarmBroadCastReceive" />
 
         <service
             android:name=".notification.NotificationService"
