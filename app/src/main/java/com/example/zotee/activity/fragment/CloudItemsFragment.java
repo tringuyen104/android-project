@@ -91,7 +91,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                 // Set click listener for the whole note view
                 final String noteKey = noteRef.getKey();
                 viewHolder.itemView.setOnClickListener(v -> {
-                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Đang xem "+ model.getTitle(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(CloudItemsFragment.this.requireActivity(), "Đang xem: " + model.getTitle(), Toast.LENGTH_LONG).show();
                     AsyncTask.execute(() -> {
                         Intent intent = new Intent(CloudItemsFragment.this.requireActivity(), CloudEventDetailsActivity.class);
                         Bundle bundle = new Bundle();
