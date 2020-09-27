@@ -124,6 +124,7 @@ public class CloudItemsFragment extends SearchableActionBarFragment {
                                 Toast.makeText(CloudItemsFragment.this.requireActivity(), "Lỗi dữ liệu! Không tìm thấy invitation trên hệ thống.", Toast.LENGTH_LONG).show();
                                 return;
                             }
+                            entity.setId(model.getInvitationId());
                             Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
                             sendIntent.putExtra(Intent.EXTRA_TEXT, MessageGenerator.genInviteMessage(entity));

@@ -161,6 +161,7 @@ public class NoteAdapter extends  RecyclerView.Adapter<ItemViewHolder> {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     NoteEntity noteEntity = snapshot.getValue(NoteEntity.class);
                                     if(noteEntity != null) {
+                                        invitationEntity.setId(noteEntity.getInvitationId());
                                         openShareDialog(view, invitationEntity);
                                     } else {
                                         dataRepository.queryNoteCount().addValueEventListener(new ValueEventListener() {
