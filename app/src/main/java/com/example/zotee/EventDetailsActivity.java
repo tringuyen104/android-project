@@ -51,6 +51,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
 
     Button btnSetPath;
     Button btnCheckMap;
+    Button btnBack;
     EditText eventName;
     EditText txtTime;
     EditText source;
@@ -80,6 +81,7 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
 
         btnSetPath = (Button) findViewById(R.id.bt_track_path);
         btnCheckMap = (Button) findViewById(R.id.btn_check_map_event);
+        btnBack = (Button) findViewById(R.id.bt_back);
         eventName = (EditText) findViewById(R.id.event_name);
         txtTime = (EditText) findViewById(R.id.time);
 //        source = (EditText) findViewById(R.id.etSource);
@@ -106,9 +108,20 @@ public class EventDetailsActivity extends AppCompatActivity implements DatePicke
             @Override
             public void onClick(View view) {
                 String sDes = des.getText().toString().trim();
+                if (sDes.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter both location!", Toast.LENGTH_SHORT).show();
+                } else {
+                    getCurrentLocation();
+                    DisplayTrack(sSource, sDes);
+                }
+            }
+        });
 
-                getCurrentLocation();
-                DisplayTrack(sSource, sDes);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                startActivity(intent);
             }
         });
 

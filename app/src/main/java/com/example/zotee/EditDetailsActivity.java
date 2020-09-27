@@ -57,6 +57,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
     Button btnSetPath;
     Button btnCheckMap;
     Button btnDeleteNode;
+    Button btnBack;
     EditText eventName;
     EditText txtTime;
     EditText source;
@@ -79,6 +80,7 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
         btnSetPath = (Button) findViewById(R.id.bt_edit_track_path);
         btnCheckMap = (Button) findViewById(R.id.btn_check_map);
         btnDeleteNode = (Button) findViewById(R.id.btn_delete_note);
+        btnBack = (Button) findViewById(R.id.bt_back);
         eventName = (EditText) findViewById(R.id.event_edit_name);
         txtTime = (EditText) findViewById(R.id.time_edit);
         des = (EditText) findViewById(R.id.etDestination_edit);
@@ -115,14 +117,25 @@ public class EditDetailsActivity extends AppCompatActivity implements DatePicker
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(view.getContext(), HomeActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
         btnCheckMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String sDes = des.getText().toString().trim();
-
-                getCurrentLocation();
-                DisplayTrack(sSource, sDes);
+                if (sDes.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter both location!", Toast.LENGTH_SHORT).show();
+                } else {
+                    getCurrentLocation();
+                    DisplayTrack(sSource, sDes);
                 }
+            }
         });
 
         btnDeleteNode.setOnClickListener(new View.OnClickListener() {
